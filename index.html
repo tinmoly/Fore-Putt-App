@@ -6,7 +6,7 @@
   <title>Putting Practice App</title>
 
   <!-- Inline PWA Manifest -->
-  <link rel="manifest" href="data:application/json,{"name":"Putting Practice","short_name":"Putting","start_url":"./","display":"standalone","background_color":"#0b3d2e","theme_color":"#0b3d2e","icons[...] }" />
+  <link rel="manifest" href="data:application/json,{"name":"Putting Practice","short_name":"Putting","start_url":"./","display":"standalone","background_color":"#0b3d2e","theme_color":"#0b3d2e","icons[...]}" />
 
   <style>
     body {
@@ -41,27 +41,25 @@
       cursor: pointer;
     }
 
+    /* smaller dropdown used for history actions */
+    .small-select {
+      width: auto;
+      padding: 8px;
+      border-radius: 8px;
+      font-size: 14px;
+      background: #1c7c5b;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
     select {
       background: #1c7c5b;
       color: white;
     }
 
     .made { background: #2ecc71; }
-    .missed { background: #e74c3c; display: flex; align-items: center; justify-content: center; }
-
-    /* X icon styling with subtle shadow border */
-    .missed .icon-x {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 6px;
-      background: rgba(0,0,0,0.08);
-      box-shadow: 0 0 0 2px rgba(0,0,0,0.12), 0 4px 10px rgba(0,0,0,0.25);
-      margin-right: 8px;
-      line-height: 1;
-      font-weight: 700;
-      font-size: 1.05em;
-      transform: translateZ(0);
-    }
+    .missed { background: #e74c3c; }
 
     .install {
       background: #3498db;
@@ -72,17 +70,6 @@
       margin-top: 20px;
       text-align: center;
       font-size: 18px;
-    }
-
-    .small-select {
-      width: auto;
-      padding: 8px;
-      border-radius: 8px;
-      font-size: 14px;
-      background: #1c7c5b;
-      color: #fff;
-      border: none;
-      cursor: pointer;
     }
   </style>
 </head>
@@ -99,7 +86,7 @@
     </select>
 
     <button class="made" onclick="recordMade()">✅ Made</button>
-    <button class="missed" onclick="recordMissed()"><span class="icon-x" aria-hidden="true">×</span>Missed</button>
+    <button class="missed" onclick="recordMissed()">❌ Missed</button>
     <button onclick="newSession()" style="background:#f1c40f;color:#000">🔄 New Session</button>
 
     <div class="stats">
@@ -110,12 +97,13 @@
 
     <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;">
       <h3 style="margin:0;">Session History</h3>
-      <select id="historyAction" onchange="handleHistoryAction()" style="width:auto;padding:8px;border-radius:8px;font-size:14px;background:#1c7c5b;color:#fff;border:none;cursor:pointer">
+      <select id="historyAction" class="small-select" onchange="handleHistoryAction()">
         <option value="">Actions</option>
         <option value="export">Export History</option>
         <option value="delete">Delete History</option>
       </select>
     </div>
+
     <div id="history" style="text-align:left;margin-top:10px"></div>
   </div>
 
@@ -190,6 +178,7 @@
 
       const session = {
         date: new Date().toISOString(),
+        // deep copy stats to freeze the session data
         stats: JSON.parse(JSON.stringify(stats))
       };
 
@@ -202,11 +191,13 @@
       renderHistory();
     }
 
-    // History action handler (Delete + Export)
+    // History action handler (Export + Delete)
     function handleHistoryAction() {
       const sel = document.getElementById('historyAction');
       const val = sel.value;
+      // reset selection immediately for better UX
       sel.value = '';
+
       if (val === 'delete') {
         if (!confirm('Delete all session history? This cannot be undone.')) return;
         sessions = [];
@@ -217,6 +208,7 @@
       }
     }
 
+    // Export session history to CSV
     function exportHistoryCSV() {
       if (!sessions || sessions.length === 0) {
         alert('No session history to export.');
@@ -224,22 +216,39 @@
       }
 
       // CSV header
-      let csv = 'Session,Date,Distance,Made,Missed,Total,Make%\n';
+      // Columns: SessionNumber, SessionDate, Distance, Made, Missed, TotalPutts, MakePercent
+      let csv = 'Session,Date,Distance,Made,Missed,Total,Make%\\n';
 
+      // Use session order (1..N) as saved; if reversed view desired, change accordingly
       sessions.forEach((session, sIndex) => {
         const sessionNum = sIndex + 1;
         const date = new Date(session.date).toLocaleString();
 
-        Object.keys(session.stats).forEach(distance => {
-          const d = session.stats[distance];
-          const total = (d.made || 0) + (d.missed || 0);
-          const percent = total === 0 ? 0 : Math.round((d.made / total) * 100);
-          // Escape values and append row
-          csv += `"${sessionNum}","${date}","${distance}","${d.made}","${d.missed}","${total}","${percent}"\n`;
+        // iterate distances in a consistent order
+        const distances = Object.keys(session.stats).sort((a,b)=>Number(a)-Number(b));
+        distances.forEach(distance => {
+          const d = session.stats[distance] || { made: 0, missed: 0 };
+          const made = d.made || 0;
+          const missed = d.missed || 0;
+          const total = made + missed;
+          const percent = total === 0 ? 0 : Math.round((made / total) * 100);
+
+          // escape double quotes by doubling them
+          const row = [
+            sessionNum,
+            date,
+            distance,
+            made,
+            missed,
+            total,
+            percent
+          ].map(String).map(s => `"${s.replace(/"/g,'""')}"`).join(',');
+
+          csv += row + '\\n';
         });
       });
 
-      const blob = new Blob([csv], { type: 'text/csv' });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -268,7 +277,7 @@
 
         Object.values(session.stats).forEach(d => {
           totalMade += d.made;
-          totalPutts += d.made + d.missed;
+          totalPutts += (d.made + d.missed);
         });
 
         const percent = totalPutts === 0 ? 0 : Math.round((totalMade / totalPutts) * 100);
@@ -279,7 +288,8 @@
         div.style.background = '#1c7c5b';
         div.style.borderRadius = '8px';
 
-        div.innerHTML = `<strong>Session ${sessions.length - index}</strong><br>\n                         ${date} • ${percent}% make rate (${totalPutts} putts)`;
+        div.innerHTML = `<strong>Session ${sessions.length - index}</strong><br>
+                         ${date} • ${percent}% make rate (${totalPutts} putts)`;
 
         historyDiv.appendChild(div);
       });
@@ -312,7 +322,9 @@
 
     // --- PWA: Service Worker (inline via Blob) ---
     if ('serviceWorker' in navigator) {
-      const swCode = `self.addEventListener('install', e => self.skipWaiting());\nself.addEventListener('activate', e => self.clients.claim());\nself.addEventListener('fetch', e => {});`;
+      const swCode = `self.addEventListener('install', e => self.skipWaiting());
+self.addEventListener('activate', e => self.clients.claim());
+self.addEventListener('fetch', e => {});`;
       const blob = new Blob([swCode], { type: 'text/javascript' });
       const swUrl = URL.createObjectURL(blob);
       navigator.serviceWorker.register(swUrl);
