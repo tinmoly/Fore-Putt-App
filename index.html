@@ -83,7 +83,13 @@
       <p>Make %: <span id="percent">0</span>%</p>
     </div>
 
-    <h3>Session History</h3>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;">
+      <h3 style="margin:0;">Session History</h3>
+      <select id="historyAction" onchange="handleHistoryAction()" style="width:auto;padding:8px;border-radius:8px;font-size:14px;background:#1c7c5b;color:#fff;border:none;cursor:pointer">
+        <option value="">Actions</option>
+        <option value="delete">Delete History</option>
+      </select>
+    </div>
     <div id="history" style="text-align:left;margin-top:10px"></div>
   </div>
 
@@ -171,25 +177,20 @@
       renderHistory();
     }
 
-    function recordMade() {
-      stats[currentDistance].made++;
-      updateStats();
-    }
-
-    function recordMissed() {
-      stats[currentDistance].missed++;
-      updateStats();
-    }
-
-    function updateStats() {
-      const made = stats[currentDistance].made;
-      const missed = stats[currentDistance].missed;
-      const total = made + missed;
-      const percent = total === 0 ? 0 : Math.round((made / total) * 100);
-
-      document.getElementById("made").textContent = made;
-      document.getElementById("missed").textContent = missed;
-      document.getElementById("percent").textContent = percent;
+    // History action handler (Delete History option)
+    function handleHistoryAction() {
+      const sel = document.getElementById('historyAction');
+      const val = sel.value;
+      if (val === 'delete') {
+        if (!confirm('Delete all session history? This cannot be undone.')) {
+          sel.value = '';
+          return;
+        }
+        sessions = [];
+        saveSessions();
+        renderHistory();
+        sel.value = '';
+      }
     }
 
     function renderHistory() {
@@ -197,7 +198,7 @@
       historyDiv.innerHTML = '';
 
       if (sessions.length === 0) {
-        historyDiv.innerHTML = '<p style="opacity:0.8">No past sessions yet.</p>';
+        historyDiv.innerHTML = '<p style="opacity:0.8">No past sessions yet.</p>' ;
         return;
       }
 
@@ -227,6 +228,10 @@
       });
     }
 
+    // initialize UI
+    updateStats();
+    renderHistory();
+
     // --- PWA: Install Prompt ---
     let deferredPrompt;
     const installBtn = document.getElementById('installBtn');
@@ -234,17 +239,19 @@
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
-      installBtn.style.display = 'block';
+      if (installBtn) installBtn.style.display = 'block';
     });
 
-    installBtn.addEventListener('click', async () => {
-      installBtn.style.display = 'none';
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        await deferredPrompt.userChoice;
-        deferredPrompt = null;
-      }
-    });
+    if (installBtn) {
+      installBtn.addEventListener('click', async () => {
+        installBtn.style.display = 'none';
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          await deferredPrompt.userChoice;
+          deferredPrompt = null;
+        }
+      });
+    }
 
     // --- PWA: Service Worker (inline via Blob) ---
     if ('serviceWorker' in navigator) {
