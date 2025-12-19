@@ -6,7 +6,7 @@
   <title>Putting Practice App</title>
 
   <!-- Inline PWA Manifest -->
-  <link rel="manifest" href="data:application/json,{"name":"Putting Practice","short_name":"Putting","start_url":"./","display":"standalone","background_color":"#0b3d2e","theme_color":"#0b3d2e","icons":[...]}" />
+  <link rel="manifest" href="data:application/json,{"name":"Putting Practice","short_name":"Putting","start_url":"./","display":"standalone","background_color":"#0b3d2e","theme_color":"#0b3d2e","icons[...] }" />
 
   <style>
     body {
@@ -87,6 +87,7 @@
       <h3 style="margin:0;">Session History</h3>
       <select id="historyAction" onchange="handleHistoryAction()" style="width:auto;padding:8px;border-radius:8px;font-size:14px;background:#1c7c5b;color:#fff;border:none;cursor:pointer">
         <option value="">Actions</option>
+        <option value="export">Export History</option>
         <option value="delete">Delete History</option>
       </select>
     </div>
@@ -123,7 +124,6 @@
     function saveSessions() {
       localStorage.setItem('puttingSessions', JSON.stringify(sessions));
     }
-
 
     function saveStats() {
       localStorage.setItem('puttingStats', JSON.stringify(stats));
@@ -165,7 +165,7 @@
 
       const session = {
         date: new Date().toISOString(),
-        stats: stats
+        stats: JSON.parse(JSON.stringify(stats))
       };
 
       sessions.push(session);
@@ -177,20 +177,53 @@
       renderHistory();
     }
 
-    // History action handler (Delete History option)
+    // History action handler (Delete + Export)
     function handleHistoryAction() {
       const sel = document.getElementById('historyAction');
       const val = sel.value;
+      sel.value = '';
       if (val === 'delete') {
-        if (!confirm('Delete all session history? This cannot be undone.')) {
-          sel.value = '';
-          return;
-        }
+        if (!confirm('Delete all session history? This cannot be undone.')) return;
         sessions = [];
         saveSessions();
         renderHistory();
-        sel.value = '';
+      } else if (val === 'export') {
+        exportHistoryCSV();
       }
+    }
+
+    function exportHistoryCSV() {
+      if (!sessions || sessions.length === 0) {
+        alert('No session history to export.');
+        return;
+      }
+
+      // CSV header
+      let csv = 'Session,Date,Distance,Made,Missed,Total,Make%\n';
+
+      sessions.forEach((session, sIndex) => {
+        const sessionNum = sIndex + 1;
+        const date = new Date(session.date).toLocaleString();
+
+        Object.keys(session.stats).forEach(distance => {
+          const d = session.stats[distance];
+          const total = (d.made || 0) + (d.missed || 0);
+          const percent = total === 0 ? 0 : Math.round((d.made / total) * 100);
+          // Escape values and append row
+          csv += `"${sessionNum}","${date}","${distance}","${d.made}","${d.missed}","${total}","${percent}"\n`;
+        });
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+      a.download = `putting_sessions_${stamp}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     }
 
     function renderHistory() {
@@ -198,7 +231,7 @@
       historyDiv.innerHTML = '';
 
       if (sessions.length === 0) {
-        historyDiv.innerHTML = '<p style="opacity:0.8">No past sessions yet.</p>' ;
+        historyDiv.innerHTML = '<p style="opacity:0.8">No past sessions yet.</p>';
         return;
       }
 
@@ -221,8 +254,7 @@
         div.style.background = '#1c7c5b';
         div.style.borderRadius = '8px';
 
-        div.innerHTML = `<strong>Session ${sessions.length - index}</strong><br>
-                         ${date} • ${percent}% make rate (${totalPutts} putts)`;
+        div.innerHTML = `<strong>Session ${sessions.length - index}</strong><br>\n                         ${date} • ${percent}% make rate (${totalPutts} putts)`;
 
         historyDiv.appendChild(div);
       });
@@ -255,9 +287,7 @@
 
     // --- PWA: Service Worker (inline via Blob) ---
     if ('serviceWorker' in navigator) {
-      const swCode = `self.addEventListener('install', e => self.skipWaiting());
-self.addEventListener('activate', e => self.clients.claim());
-self.addEventListener('fetch', e => {});`;
+      const swCode = `self.addEventListener('install', e => self.skipWaiting());\nself.addEventListener('activate', e => self.clients.claim());\nself.addEventListener('fetch', e => {});`;
       const blob = new Blob([swCode], { type: 'text/javascript' });
       const swUrl = URL.createObjectURL(blob);
       navigator.serviceWorker.register(swUrl);
