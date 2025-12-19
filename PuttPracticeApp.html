@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Putting Practice App</title>
+
+  <!-- Inline PWA Manifest -->
+  <link rel="manifest" href="data:application/json,{"name":"Putting Practice","short_name":"Putting","start_url":"./","display":"standalone","background_color":"#0b3d2e","theme_color":"#0b3d2e","icons":[{"src":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAF0lEQVR4nO3BMQEAAADCoPdPbQ43oAAAAAAAAAAAgL0HkAABX9qS3QAAAABJRU5ErkJggg==","sizes":"192x192","type":"image/png"}]}" />
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0b3d2e;
+      color: #ffffff;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .card {
+      background: #145a43;
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 420px;
+      margin: 0 auto;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    select, button {
+      width: 100%;
+      padding: 15px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    select {
+      background: #1c7c5b;
+      color: white;
+    }
+
+    .made { background: #2ecc71; }
+    .missed { background: #e74c3c; }
+
+    .install {
+      background: #3498db;
+      display: none;
+    }
+
+    .stats {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1 id="distanceTitle">6-Foot Putts</h1>
+
+    <select id="distance" onchange="changeDistance()">
+      <option value="3">3 Feet</option>
+      <option value="6" selected>6 Feet</option>
+      <option value="9">9 Feet</option>
+      <option value="12">12 Feet</option>
+      <option value="20">20 Feet</option>
+    </select>
+
+    <button class="made" onclick="recordMade()">✅ Made</button>
+    <button class="missed" onclick="recordMissed()">❌ Missed</button>
+    <button onclick="newSession()" style="background:#f1c40f;color:#000">🔄 New Session</button>
+
+    <div class="stats">
+      <h3>Session History</h3>
+      <div id="history" style="text-align:left;margin-top:10px"></div>
+      <p>Made: <span id="made">0</span></p>
+      <p>Missed: <span id="missed">0</span></p>
+      <p>Make %: <span id="percent">0</span>%</p>
+    </div>
+  </div>
+
+  <script>
+    // --- Putting Logic ---
+    let currentDistance = 6;
+
+    let stats = loadStats();
+    let sessions = loadSessions();
+
+    function defaultStats() {
+      return {
+        3: { made: 0, missed: 0 },
+        6: { made: 0, missed: 0 },
+        9: { made: 0, missed: 0 },
+        12: { made: 0, missed: 0 },
+        20: { made: 0, missed: 0 }
+      };
+    }
+
+    function loadStats() {
+      const saved = localStorage.getItem('puttingStats');
+      return saved ? JSON.parse(saved) : defaultStats();
+    }
+
+    function loadSessions() {
+      const saved = localStorage.getItem('puttingSessions');
+      return saved ? JSON.parse(saved) : [];
+    }
+
+    function saveSessions() {
+      localStorage.setItem('puttingSessions', JSON.stringify(sessions));
+    }
+
+
+    function saveStats() {
+      localStorage.setItem('puttingStats', JSON.stringify(stats));
+    }
+
+    function changeDistance() {
+      const select = document.getElementById("distance");
+      currentDistance = select.value;
+      document.getElementById("distanceTitle").textContent = `${currentDistance}-Foot Putts`;
+      updateStats();
+      renderHistory();
+    }
+
+    function recordMade() {
+      stats[currentDistance].made++;
+      saveStats();
+      updateStats();
+    }
+
+    function recordMissed() {
+      stats[currentDistance].missed++;
+      saveStats();
+      updateStats();
+    }
+
+    function updateStats() {
+      const made = stats[currentDistance].made;
+      const missed = stats[currentDistance].missed;
+      const total = made + missed;
+      const percent = total === 0 ? 0 : Math.round((made / total) * 100);
+
+      document.getElementById("made").textContent = made;
+      document.getElementById("missed").textContent = missed;
+      document.getElementById("percent").textContent = percent;
+    }
+
+    function newSession() {
+      if (!confirm('Start a new session? This will save the current session and reset all distances.')) return;
+
+      const session = {
+        date: new Date().toISOString(),
+        stats: stats
+      };
+
+      sessions.push(session);
+      saveSessions();
+
+      stats = defaultStats();
+      saveStats();
+      updateStats();
+      renderHistory();
+    }
+
+    function recordMade() {
+      stats[currentDistance].made++;
+      updateStats();
+    }
+
+    function recordMissed() {
+      stats[currentDistance].missed++;
+      updateStats();
+    }
+
+    function updateStats() {
+      const made = stats[currentDistance].made;
+      const missed = stats[currentDistance].missed;
+      const total = made + missed;
+      const percent = total === 0 ? 0 : Math.round((made / total) * 100);
+
+      document.getElementById("made").textContent = made;
+      document.getElementById("missed").textContent = missed;
+      document.getElementById("percent").textContent = percent;
+    }
+
+    function renderHistory() {
+      const historyDiv = document.getElementById('history');
+      historyDiv.innerHTML = '';
+
+      if (sessions.length === 0) {
+        historyDiv.innerHTML = '<p style="opacity:0.8">No past sessions yet.</p>';
+        return;
+      }
+
+      sessions.slice().reverse().forEach((session, index) => {
+        const date = new Date(session.date).toLocaleDateString();
+
+        let totalMade = 0;
+        let totalPutts = 0;
+
+        Object.values(session.stats).forEach(d => {
+          totalMade += d.made;
+          totalPutts += d.made + d.missed;
+        });
+
+        const percent = totalPutts === 0 ? 0 : Math.round((totalMade / totalPutts) * 100);
+
+        const div = document.createElement('div');
+        div.style.padding = '8px';
+        div.style.marginBottom = '6px';
+        div.style.background = '#1c7c5b';
+        div.style.borderRadius = '8px';
+
+        div.innerHTML = `<strong>Session ${sessions.length - index}</strong><br>
+                         ${date} • ${percent}% make rate (${totalPutts} putts)`;
+
+        historyDiv.appendChild(div);
+      });
+    }
+
+    // --- PWA: Install Prompt ---
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = 'block';
+    });
+
+    installBtn.addEventListener('click', async () => {
+      installBtn.style.display = 'none';
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        await deferredPrompt.userChoice;
+        deferredPrompt = null;
+      }
+    });
+
+    // --- PWA: Service Worker (inline via Blob) ---
+    if ('serviceWorker' in navigator) {
+      const swCode = `self.addEventListener('install', e => self.skipWaiting());
+self.addEventListener('activate', e => self.clients.claim());
+self.addEventListener('fetch', e => {});`;
+      const blob = new Blob([swCode], { type: 'text/javascript' });
+      const swUrl = URL.createObjectURL(blob);
+      navigator.serviceWorker.register(swUrl);
+    }
+  </script>
+</body>
+</html>
