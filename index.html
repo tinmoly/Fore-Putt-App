@@ -186,7 +186,7 @@
     <div class="stats">
       <p>Made: <span id="made">0</span></p>
       <p>Missed: <span id="missed">0</span></p>
-      <p>Make %: <span id="percent">0</span>%</p>
+      <p>⛳ Make %: :span id="percent">0</span>%</p>
       <p>🔥 Streak: <span id="streak">0</span></p>
     </div>
 
@@ -460,7 +460,7 @@
         row.style.padding = '6px 0';
         const tourAvg = PGA_TOUR_AVG[d];
         const star = percent >= tourAvg && total > 0 ? ' ⭐' : '';
-        row.innerHTML = `<strong>${d} ft${star}:</strong> ${stat.made}/${total} (${percent}%) — PGA ${tourAvg}%`;
+        row.innerHTML = `<strong>${star} ${d} ft:</strong> ${stat.made}/${total} (${percent}%) — PGA ${tourAvg}%`;
         body.appendChild(row);
       });
 
