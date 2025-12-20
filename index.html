@@ -460,7 +460,7 @@
         row.style.padding = '6px 0';
         const tourAvg = PGA_TOUR_AVG[d];
         const star = percent >= tourAvg && total > 0 ? ' ⭐' : '';
-        row.innerHTML = `<strong>${star} ${d} ft:</strong> ${stat.made}/${total} (${percent}%) — PGA ${tourAvg}%`;
+        row.innerHTML = `<strong>${d} ft:</strong> ${stat.made}/${total} (${percent}%) — PGA ${tourAvg}%` ${star};
         body.appendChild(row);
       });
 
