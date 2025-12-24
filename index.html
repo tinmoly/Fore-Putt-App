@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fore!Putt Practice App — Version 1.5 (Fixed)</title>
+  <title>Fore!Putt Practice App — Version 1.7.1</title>
 
   <style>
     body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0b3d2e;color:#fff;margin:0;padding:20px}
@@ -20,7 +20,7 @@
     .distance-btn.active{background:#2ecc71;color:#000}
 
     button{width:100%;border:none;border-radius:14px;cursor:pointer;font-weight:800;margin-top:10px}
-    .made,.missed{height:80px;font-size:32px}
+    .made,.missed{height:96px;font-size:32px}
     .made{background:#2ecc71;color:#000}
     .missed{background:#E34234;color:#000}
     button:active{transform:scale(.97)}
@@ -40,10 +40,9 @@
   <div id="distanceRow" class="distance-row"></div>
 
   <div style="display:flex;gap:10px;">
-  <button class="made" onclick="recordMade()">✅ Made</button>
-  <button class="missed" onclick="recordMissed()">⛔ Missed</button>
-</div>
-  
+    <button class="made" onclick="recordMade()">✅ Made</button>
+    <button class="missed" onclick="recordMissed()">⛔ Missed</button>
+  </div>
 
   <div class="stats">
     <p>Made: <span id="made">0</span> | Missed: <span id="missed">0</span></p>
@@ -53,7 +52,7 @@
 
   <div id="targetBadge" class="badge"></div>
 
-  <button onclick="newSession()" style="background:#0096FF;color:#000;height:64px;font-size:24px">🔄 New Session</button>
+  <button onclick="newSession()" style="background:#0096FF;color:#000;height:48px;font-size:24px">🔄 New Session</button>
 
   <div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px">
     <h3 style="margin:0">Session History</h3>
@@ -107,32 +106,201 @@ function loadSessions(){return JSON.parse(localStorage.getItem('puttingSessions'
 function saveSessions(){localStorage.setItem('puttingSessions',JSON.stringify(sessions))}
 
 /* ---------- UI ---------- */
-function buildDistanceRow(){const row=$('distanceRow');row.innerHTML='';DISTANCES.forEach(d=>{const b=document.createElement('button');b.className='distance-btn'+(d===currentDistance?' active':'');b.textContent=d+"'";b.onclick=()=>setDistance(d);row.appendChild(b)})}
+function buildDistanceRow(){
+  const row=$('distanceRow');
+  row.innerHTML='';
+  DISTANCES.forEach(d=>{
+    const b=document.createElement('button');
+    b.className='distance-btn'+(d===currentDistance?' active':'');
+    b.textContent=d+"'";
+    b.onclick=()=>setDistance(d);
+    row.appendChild(b);
+  });
+}
 
-function setDistance(d){currentDistance=d;$('distanceTitle').textContent=`${d}-Foot Putts`;buildDistanceRow();updateStats()}
+function setDistance(d){
+  currentDistance=d;
+  $('distanceTitle').textContent=`${d}-Foot Putts`;
+  buildDistanceRow();
+  updateStats();
+}
 
-function updateStats(){const {made,missed}=stats[currentDistance];const total=made+missed;const pct=total?Math.round(made/total*100):0;$('made').textContent=made;$('missed').textContent=missed;$('percent').textContent=pct;const sVal=streaks[currentDistance]||0;$('streak').textContent=sVal;$('streakLabel').textContent=`${getStreakEmojis(sVal)} Streak`.trim();const target=PGA_TOUR_AVG[currentDistance];$('targetBadge').className='badge '+(pct>=target?'met':'not-met');$('targetBadge').innerHTML=pct>=target?`🏆 Better than PGA Tour Avg!<br>${target}% target`:`🎯 Target: ${target}% PGA Tour Avg`}
+function updateStats(){
+  const {made,missed}=stats[currentDistance];
+  const total=made+missed;
+  const pct=total?Math.round(made/total*100):0;
+  $('made').textContent=made;
+  $('missed').textContent=missed;
+  $('percent').textContent=pct;
+  const sVal=streaks[currentDistance]||0;
+  $('streak').textContent=sVal;
+  $('streakLabel').textContent=`${getStreakEmojis(sVal)} Streak`.trim();
+  const target=PGA_TOUR_AVG[currentDistance];
+  $('targetBadge').className='badge '+(pct>=target?'met':'not-met');
+  $('targetBadge').innerHTML=pct>=target
+    ? `🏆 Better than PGA Tour Avg!<br>🎯 Target: ${target}%`
+    : `🎯 Target: ${target}% PGA Tour Avg`;
+}
 
 /* ---------- ACTIONS ---------- */
-function recordMade(){withTapLock(()=>{stats[currentDistance].made++;streaks[currentDistance]++;flash('flash-green');haptic(20);saveStats();saveStreaks();updateStats()})}
-function recordMissed(){withTapLock(()=>{stats[currentDistance].missed++;streaks[currentDistance]=0;flash('flash-red');haptic([10,40]);saveStats();saveStreaks();updateStats()})}
+function recordMade(){
+  withTapLock(()=>{
+    stats[currentDistance].made++;
+    streaks[currentDistance]++;
+    flash('flash-green');
+    haptic(20);
+    saveStats();
+    saveStreaks();
+    updateStats();
+  });
+}
 
-function newSession(){if(!confirm('Start a new session?'))return;sessions.push({date:new Date().toISOString(),stats:JSON.parse(JSON.stringify(stats))});saveSessions();stats=defaultStats();streaks={};DISTANCES.forEach(d=>streaks[d]=0);saveStats();saveStreaks();updateStats();renderHistory()}
+function recordMissed(){
+  withTapLock(()=>{
+    stats[currentDistance].missed++;
+    streaks[currentDistance]=0;
+    flash('flash-red');
+    haptic([10,40]);
+    saveStats();
+    saveStreaks();
+    updateStats();
+  });
+}
 
-function handleHistoryAction(){const sel=$('historyAction');const v=sel.value;sel.value='';if(v==='delete'){if(!confirm('Delete all session history?'))return;sessions=[];saveSessions();renderHistory()}if(v==='export'){exportHistoryCSV()}}
+function newSession(){
+  if(!confirm('Start a new session?'))return;
+  sessions.push({date:new Date().toISOString(),stats:JSON.parse(JSON.stringify(stats))});
+  saveSessions();
+  stats=defaultStats();
+  streaks={};
+  DISTANCES.forEach(d=>streaks[d]=0);
+  saveStats();
+  saveStreaks();
+  updateStats();
+  renderHistory();
+}
 
-function exportHistoryCSV(){if(!sessions.length){alert('No session history to export.');return}let csv='Session,Date,Distance,Made,Missed,Total,Make%\n';sessions.forEach((s,i)=>{const date=new Date(s.date).toLocaleString();DISTANCES.forEach(d=>{const st=s.stats[d]||{made:0,missed:0};const t=st.made+st.missed;if(t===0)return;const p=Math.round(st.made/t*100);csv+=`${i+1},${date},${d},${st.made},${st.missed},${t},${p}\n`})});const blob=new Blob([csv],{type:'text/csv'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`foreputt_history_${new Date().toISOString().slice(0,10)}.csv`;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url)}
+function handleHistoryAction(){
+  const sel=$('historyAction');
+  const v=sel.value;
+  sel.value='';
+
+  if(v==='delete'){
+    if(!confirm('Delete all session history?'))return;
+    sessions=[];
+    saveSessions();
+    closeSessionDetail();
+    renderHistory();
+    return;
+  }
+
+  if(v==='export'){
+    exportHistoryCSV();
+  }
+}
+
+function exportHistoryCSV(){
+  if(!sessions.length){alert('No session history to export.');return}
+  let csv='Session,Date,Time,Distance,Made,Missed,Total,Make%\n';
+  sessions.forEach((s,i)=>{
+    const date=new Date(s.date).toLocaleString();
+    DISTANCES.forEach(d=>{
+      const st=s.stats[d]||{made:0,missed:0};
+      const t=st.made+st.missed;
+      if(t===0)return;
+      const p=Math.round(st.made/t*100);
+      csv+=`${i+1},${date},${d},${st.made},${st.missed},${t},${p}\n`;
+    });
+  });
+  const blob=new Blob([csv],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=`foreputt_history_${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
 
 /* ---------- HISTORY ---------- */
-function renderHistory(){const h=$('history');h.innerHTML='';if(!sessions.length){h.innerHTML='<p style="opacity:.8">No sessions yet.</p>';return}sessions.slice().reverse().forEach((s,i)=>{let made=0,total=0;Object.values(s.stats).forEach(d=>{made+=d.made;total+=d.made+d.missed});const pct=total?Math.round(made/total*100):0;const idx=sessions.length-1-i;const card=document.createElement('div');card.className='history-card';card.onclick=()=>openSessionDetail(idx);card.innerHTML=`<strong>Session ${idx+1}</strong><br>${new Date(s.date).toLocaleDateString()} • ${pct}% (${total} putts)<div class="progress"><div class="progress-fill" style="width:${pct}%"></div></div>`;h.appendChild(card)})}
+function renderHistory(){
+  const h = $('history');
+  h.innerHTML = '';
 
-function openSessionDetail(idx){const s=sessions[idx];$('sessionDetailTitle').textContent=`Session ${idx+1} — ${new Date(s.date).toLocaleString()}`;const body=$('sessionDetailBody');body.innerHTML='';DISTANCES.forEach(d=>{const st=s.stats[d]||{made:0,missed:0};const t=st.made+st.missed;if(t===0)return;const pct=Math.round(st.made/t*100);const star=pct>=PGA_TOUR_AVG[d]?' ⭐':'';const row=document.createElement('div');row.style.padding='6px 0';row.innerHTML=`<strong>${d} ft:</strong> ${st.made}/${t} (${pct}%) — PGA ${PGA_TOUR_AVG[d]}%${star}`;body.appendChild(row)});$('sessionDetail').style.display='block';$('sessionDetail').dataset.index=idx}
+  if(!sessions.length){
+    h.innerHTML = '<p style="opacity:.8">No sessions yet.</p>';
+    closeSessionDetail();
+    return;
+  }
 
-function closeSessionDetail(){$('sessionDetail').style.display='none';$('sessionDetail').dataset.index=''}
-function deleteSession(){const idx=Number($('sessionDetail').dataset.index);if(isNaN(idx))return;if(!confirm('Delete this session?'))return;sessions.splice(idx,1);saveSessions();closeSessionDetail();renderHistory()}
+  sessions.slice().reverse().forEach((s,i)=>{
+    let made = 0, total = 0;
+    Object.values(s.stats).forEach(d=>{
+      made += d.made;
+      total += d.made + d.missed;
+    });
+
+    const pct = total ? Math.round(made / total * 100) : 0;
+    const idx = sessions.length - 1 - i;
+
+    const card = document.createElement('div');
+    card.className = 'history-card';
+
+    card.onclick = () => {
+      const panel = $('sessionDetail');
+      if(panel.style.display === 'block' && panel.dataset.index == idx){
+        closeSessionDetail();
+      } else {
+        openSessionDetail(idx);
+      }
+    };
+
+    card.innerHTML = `<strong>Session ${idx+1}</strong><br>${new Date(s.date).toLocaleDateString()} • ${pct}% (${total} putts)<div class="progress"><div class="progress-fill" style="width:${pct}%"></div></div>`;
+
+    h.appendChild(card);
+  });
+}
+
+function openSessionDetail(idx){
+  const s=sessions[idx];
+  $('sessionDetailTitle').textContent=`Session ${idx+1} — ${new Date(s.date).toLocaleString()}`;
+  const body=$('sessionDetailBody');
+  body.innerHTML='';
+  DISTANCES.forEach(d=>{
+    const st=s.stats[d]||{made:0,missed:0};
+    const t=st.made+st.missed;
+    if(t===0)return;
+    const pct=Math.round(st.made/t*100);
+    const star=pct>=PGA_TOUR_AVG[d]?' ⭐':'';
+    const row=document.createElement('div');
+    row.style.padding='6px 0';
+    row.innerHTML=`<strong>${d} ft:</strong> ${st.made}/${t} (${pct}%) — PGA ${PGA_TOUR_AVG[d]}%${star}`;
+    body.appendChild(row);
+  });
+  $('sessionDetail').style.display='block';
+  $('sessionDetail').dataset.index=idx;
+}
+
+function closeSessionDetail(){
+  $('sessionDetail').style.display='none';
+  $('sessionDetail').dataset.index='';
+}
+
+function deleteSession(){
+  const idx=Number($('sessionDetail').dataset.index);
+  if(isNaN(idx))return;
+  if(!confirm('Delete this session?'))return;
+  sessions.splice(idx,1);
+  saveSessions();
+  closeSessionDetail();
+  renderHistory();
+}
 
 /* ---------- INIT ---------- */
-buildDistanceRow();updateStats();renderHistory();
+buildDistanceRow();
+updateStats();
+renderHistory();
 </script>
 </body>
 </html>
