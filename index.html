@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fore!Putt Practice App — Version 1.8.2</title>
+  <title>Fore!Putt Practice App — Version 1.9.1</title>
 
   <style>
     body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0b3d2e;color:#fff;margin:0;padding:20px}
@@ -16,24 +16,24 @@
     h1,h3{text-align:center;margin-bottom:10px}
 
     .distance-row{display:flex;gap:8px;overflow-x:auto;margin-bottom:12px}
-    .distance-btn{background:#1c7c5b;border:none;padding:10px 18px;border-radius:999px;font-weight:800;color:#fff;cursor:pointer;white-space:nowrap;font-size:22px}
+    .distance-btn{background:#1c7c5b;border:none;padding:10px 20px;border-radius:999px;font-weight:800;color:#fff;cursor:pointer;white-space:nowrap;font-size:24px}
     .distance-btn.active{background:#2ecc71;color:#000}
 
     button{width:100%;border:none;border-radius:14px;cursor:pointer;font-weight:800;margin-top:10px}
     .made,.missed{height:96px;font-size:32px}
-    .made{background:#2ecc71;color:#000}
-    .missed{background:#E34234;color:#000}
-    button:active{transform:scale(.97)}
+    .made{background:#2ecc71;color:#000;box-shadow:3px 0 0 #1e9e54,0 3px 0 #1e9e54,0 10px 20px rgba(0,0,0,.35);border-bottom:3px solid #1e9e54;border-right:3px solid #1e9e54}
+    .missed{background:#E34234;color:#000;box-shadow:3px 0 0 #b03026,0 3px 0 #b03026,0 10px 20px rgba(0,0,0,.35);border-bottom:3px solid #b03026;border-right:3px solid #b03026}
+    button:active{transform:translateY(3px) scale(.97);box-shadow:0 2px 0 rgba(0,0,0,.25)}
 
     .stats{text-align:center;font-size:18px;margin-top:20px}
     .badge{margin-top:10px;padding:10px;border-radius:10px;text-align:center;background:#0e4f3a}
-    .badge.met{background:#1f7a4a}.badge.not-met{background:#6b2a2a}
+    .badge.met{background:#1f7a4a}
+    .badge.not-met{background:#6b2a2a}
 
     .history-card{padding:10px;background:#1c7c5b;border-radius:10px;cursor:pointer}
     .history-wrapper{margin-bottom:10px}
     .accordion{display:none;margin-top:8px;padding:10px;background:#0e4f3a;border-radius:10px}
-    .progress{height:6px;background:rgba(255,255,255,.2);border-radius:999px;margin-top:6px}
-    .progress-fill{height:100%;background:#2ecc71;border-radius:999px}
+    .subtle{opacity:.75;font-size:14px;margin-left:6px}
   </style>
 </head>
 <body>
@@ -41,7 +41,7 @@
   <h1 id="distanceTitle">2-Foot Putts</h1>
   <div id="distanceRow" class="distance-row"></div>
 
-  <div style="display:flex;gap:10px;">
+  <div style="display:flex;gap:20px;">
     <button class="made" onclick="recordMade()">✅ Made</button>
     <button class="missed" onclick="recordMissed()">⛔ Missed</button>
   </div>
@@ -54,7 +54,7 @@
 
   <div id="targetBadge" class="badge"></div>
 
-  <button onclick="newSession()" style="background:#0096FF;color:#000;height:48px;font-size:24px">🔄 New Session</button>
+  <button onclick="newSession()" style="background:#0096FF;color:#000;height:48px;font-size:24px;box-shadow:0px 0 0 #0074c7,0 5px 0 #0074c7;">🔄 New Session</button>
 
   <div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px">
     <h3 style="margin:0">Session History</h3>
@@ -68,49 +68,326 @@
 </div>
 
 <script>
-const DISTANCES=[2,3,4,5,6,7,8,9,10,15,20,30];
-const PGA_TOUR_AVG={2:99,3:96,4:88,5:77,6:66,7:58,8:50,9:45,10:40,15:23,20:15,30:7};
+// ---------- Constants ----------
+const DISTANCES = [2,3,4,5,6,7,8,9,10,15,20,30];
+const PGA_TOUR_AVG = {2:99,3:96,4:88,5:77,6:66,7:58,8:50,9:45,10:40,15:23,20:15,30:7};
 
-let currentDistance=2;
-let stats=loadStats();
-let streaks=loadStreaks();
-let sessions=loadSessions();
+// ---------- State ----------
+let currentDistance = 2;
+let stats = loadStats();
+let streaks = loadStreaks();
+let bestStreaks = defaultBestStreaks();
+let sessions = loadSessions();
 
-const $=id=>document.getElementById(id);
-let tapLocked=false;const TAP_DELAY=300;
-function withTapLock(fn){if(tapLocked)return;tapLocked=true;fn();setTimeout(()=>tapLocked=false,TAP_DELAY)}
-function haptic(ms){if(navigator.vibrate)navigator.vibrate(ms)}
-function flash(cls){document.body.classList.add(cls);setTimeout(()=>document.body.classList.remove(cls),150)}
-function getStreakEmojis(v){if(v>=10)return'🔥🔥🔥🔥🔥';if(v>=7)return'🔥🔥🔥🔥';if(v>=5)return'🔥🔥🔥';if(v>=3)return'🔥🔥';if(v>=1)return'🔥';return''}
+// ---------- Utilities ----------
+const $ = id => document.getElementById(id);
+let tapLocked = false;
+const TAP_DELAY = 300;
 
-function defaultStats(){const o={};DISTANCES.forEach(d=>o[d]={made:0,missed:0});return o}
-function loadStats(){return JSON.parse(localStorage.getItem('puttingStats'))||defaultStats()}
-function saveStats(){localStorage.setItem('puttingStats',JSON.stringify(stats))}
-function loadStreaks(){const s=JSON.parse(localStorage.getItem('puttingStreaks'))||{};const o={};DISTANCES.forEach(d=>o[d]=s[d]||0);return o}
-function saveStreaks(){localStorage.setItem('puttingStreaks',JSON.stringify(streaks))}
-function loadSessions(){return JSON.parse(localStorage.getItem('puttingSessions'))||[]}
-function saveSessions(){localStorage.setItem('puttingSessions',JSON.stringify(sessions))}
+function withTapLock(fn){
+  if(tapLocked) return;
+  tapLocked = true;
+  fn();
+  setTimeout(function(){ tapLocked = false; }, TAP_DELAY);
+}
 
-function buildDistanceRow(){const r=$('distanceRow');r.innerHTML='';DISTANCES.forEach(d=>{const b=document.createElement('button');b.className='distance-btn'+(d===currentDistance?' active':'');b.textContent=d+"'";b.onclick=()=>setDistance(d);r.appendChild(b)})}
-function setDistance(d){currentDistance=d;$('distanceTitle').textContent=`${d}-Foot Putts`;buildDistanceRow();updateStats()}
-function updateStats(){const {made,missed}=stats[currentDistance];const t=made+missed;const p=t?Math.round(made/t*100):0;$('made').textContent=made;$('missed').textContent=missed;$('percent').textContent=p;const s=streaks[currentDistance]||0;$('streak').textContent=s;$('streakLabel').textContent=`${getStreakEmojis(s)} Streak`.trim();const target=PGA_TOUR_AVG[currentDistance];$('targetBadge').className='badge '+(p>=target?'met':'not-met');$('targetBadge').innerHTML=p>=target?`🏆 Better than PGA Tour Avg!<br>🎯 Target: ${target}%`:`🎯 Target: ${target}% PGA Tour Avg`}
+function haptic(ms){
+  if(navigator.vibrate) navigator.vibrate(ms);
+}
 
-function recordMade(){withTapLock(()=>{stats[currentDistance].made++;streaks[currentDistance]++;flash('flash-green');haptic(20);saveStats();saveStreaks();updateStats()})}
-function recordMissed(){withTapLock(()=>{stats[currentDistance].missed++;streaks[currentDistance]=0;flash('flash-red');haptic([10,40]);saveStats();saveStreaks();updateStats()})}
+function flash(cls){
+  document.body.classList.add(cls);
+  setTimeout(function(){ document.body.classList.remove(cls); }, 150);
+}
 
-function newSession(){if(!confirm('Start a new session?'))return;sessions.push({date:new Date().toISOString(),stats:JSON.parse(JSON.stringify(stats))});saveSessions();stats=defaultStats();streaks=loadStreaks();updateStats();renderHistory()}
+function getStreakEmojis(v){
+  if(v>=10) return '🔥🔥🔥🔥🔥';
+  if(v>=7) return '🔥🔥🔥🔥';
+  if(v>=5) return '🔥🔥🔥';
+  if(v>=3) return '🔥🔥';
+  if(v>=1) return '🔥';
+  return '';
+}
 
-function handleHistoryAction(){const sel=$('historyAction');const v=sel.value;sel.value='';if(v==='delete'){if(!confirm('Delete all session history?'))return;sessions=[];saveSessions();renderHistory()}if(v==='export'){exportHistoryCSV()}}
+// ---------- Persistence ----------
+function defaultStats(){
+  var o = {};
+  DISTANCES.forEach(function(d){ o[d] = { made:0, missed:0 }; });
+  return o;
+}
 
-function exportHistoryCSV(){if(!sessions.length){alert('No session history to export.');return}let csv='Session,Date,Time,Distance,Made,Missed,Total,Make%\n';sessions.forEach((s,i)=>{const date=new Date(s.date).toLocaleString();DISTANCES.forEach(d=>{const st=s.stats[d];const t=st.made+st.missed;if(!t)return;const p=Math.round(st.made/t*100);csv+=`${i+1},${date},${d},${st.made},${st.missed},${t},${p}\n`})});const blob=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='foreputt_history.csv';a.click()}
+function loadStats(){
+  return JSON.parse(localStorage.getItem('puttingStats')) || defaultStats();
+}
 
-function renderHistory(){const h=$('history');h.innerHTML='';if(!sessions.length){h.innerHTML='<p style="opacity:.8">No sessions yet.</p>';return}sessions.slice().reverse().forEach((s,i)=>{let m=0,t=0;Object.values(s.stats).forEach(d=>{m+=d.made;t+=d.made+d.missed});const pct=t?Math.round(m/t*100):0;const idx=sessions.length-1-i;const wrap=document.createElement('div');wrap.className='history-wrapper';const card=document.createElement('div');card.className='history-card';const acc=document.createElement('div');acc.className='accordion';card.innerHTML=`<strong>Session ${idx+1}</strong><br>${new Date(s.date).toLocaleDateString()} • ${pct}% (${t} putts)<div class="progress"><div class="progress-fill" style="width:${pct}%"></div></div>`;card.onclick=()=>{acc.style.display=acc.style.display==='block'?'none':'block'};DISTANCES.forEach(d=>{const st=s.stats[d];const tot=st.made+st.missed;if(!tot)return;const p=Math.round(st.made/tot*100);const star=p>=PGA_TOUR_AVG[d]?' ⭐':'';const row=document.createElement('div');row.innerHTML=`<strong>${d} ft:</strong> ${st.made}/${tot} (${p}%) — PGA ${PGA_TOUR_AVG[d]}%${star}`;acc.appendChild(row)});const del=document.createElement('button');del.textContent='🗑️ Delete Session';
-      del.style.background='#E34234';
-      del.style.height='36px';
-      del.style.fontSize='18px';
-      del.onclick=e=>{e.stopPropagation();if(!confirm('Delete this session?'))return;sessions.splice(idx,1);saveSessions();renderHistory()};acc.appendChild(del);wrap.appendChild(card);wrap.appendChild(acc);h.appendChild(wrap)})}
+function saveStats(){
+  localStorage.setItem('puttingStats', JSON.stringify(stats));
+}
 
-buildDistanceRow();updateStats();renderHistory();
+function loadStreaks(){
+  var s = JSON.parse(localStorage.getItem('puttingStreaks')) || {};
+  var o = {};
+  DISTANCES.forEach(function(d){ o[d] = s[d] || 0; });
+  return o;
+}
+
+function saveStreaks(){
+  localStorage.setItem('puttingStreaks', JSON.stringify(streaks));
+}
+
+function defaultBestStreaks(){
+  var o = {};
+  DISTANCES.forEach(function(d){ o[d] = 0; });
+  return o;
+}
+
+function loadSessions(){
+  return JSON.parse(localStorage.getItem('puttingSessions')) || [];
+}
+
+function saveSessions(){
+  localStorage.setItem('puttingSessions', JSON.stringify(sessions));
+}
+
+// ---------- UI ----------
+function buildDistanceRow(){
+  var r = $('distanceRow');
+  r.innerHTML = '';
+  DISTANCES.forEach(function(d){
+    var b = document.createElement('button');
+    b.className = 'distance-btn' + (d === currentDistance ? ' active' : '');
+    b.textContent = d + "'";
+    b.onclick = function(){ setDistance(d); };
+    r.appendChild(b);
+  });
+}
+
+function setDistance(d){
+  currentDistance = d;
+  streaks[d] = 0;
+  saveStreaks();
+  $('distanceTitle').textContent = d + '-Foot Putts';
+  buildDistanceRow();
+  updateStats();
+}
+
+function updateStats(){
+  var made = stats[currentDistance].made;
+  var missed = stats[currentDistance].missed;
+  var total = made + missed;
+  var pct = total ? Math.round(made / total * 100) : 0;
+
+  $('made').textContent = made;
+  $('missed').textContent = missed;
+  $('percent').textContent = pct;
+
+  var s = streaks[currentDistance] || 0;
+  $('streak').textContent = s;
+  $('streakLabel').textContent = (getStreakEmojis(s) + ' Streak').trim();
+
+  var target = PGA_TOUR_AVG[currentDistance];
+  var badge = $('targetBadge');
+  badge.className = 'badge ' + (pct >= target ? 'met' : 'not-met');
+  badge.innerHTML = pct >= target
+    ? '🏆 Better than PGA Tour Avg!<br>🎯 Target: ' + target + '%'
+    : '🎯 Target: ' + target + '% PGA Tour Avg';
+}
+
+// ---------- Actions ----------
+function recordMade(){
+  withTapLock(function(){
+    stats[currentDistance].made++;
+    streaks[currentDistance]++;
+    if(streaks[currentDistance] > bestStreaks[currentDistance]){
+      bestStreaks[currentDistance] = streaks[currentDistance];
+    }
+    flash('flash-green');
+    haptic(20);
+    saveStats();
+    saveStreaks();
+    updateStats();
+  });
+}
+
+function recordMissed(){
+  withTapLock(function(){
+    stats[currentDistance].missed++;
+    streaks[currentDistance] = 0;
+    flash('flash-red');
+    haptic([10,40]);
+    saveStats();
+    saveStreaks();
+    updateStats();
+  });
+}
+
+function newSession(){
+  if(!confirm('Start a new session?')) return;
+
+  var totalMade = 0;
+  var totalMissed = 0;
+
+  Object.values(stats).forEach(function(d){
+    totalMade += d.made;
+    totalMissed += d.missed;
+  });
+
+  var totalPutts = totalMade + totalMissed;
+  var overallPct = totalPutts ? Math.round(totalMade / totalPutts * 100) : 0;
+
+  sessions.push({
+    date: new Date().toISOString(),
+    stats: JSON.parse(JSON.stringify(stats)),
+    bestStreaks: JSON.parse(JSON.stringify(bestStreaks)),
+    summary: {
+      made: totalMade,
+      missed: totalMissed,
+      total: totalPutts,
+      pct: overallPct
+    }
+  });
+
+  saveSessions();
+  stats = defaultStats();
+  streaks = loadStreaks();
+  bestStreaks = defaultBestStreaks();
+  updateStats();
+  renderHistory();
+}
+
+function handleHistoryAction(){
+  var sel = $('historyAction');
+  var v = sel.value;
+  sel.value = '';
+
+  if(v === 'delete'){
+    if(!confirm('Delete all session history?')) return;
+    sessions = [];
+    saveSessions();
+    renderHistory();
+  }
+
+  if(v === 'export'){
+    exportHistoryCSV();
+  }
+}
+
+// ---------- CSV Export ----------
+function exportHistoryCSV(){
+  if(!sessions.length){
+    alert('No session history to export.');
+    return;
+  }
+
+  var csv = 'Session,Date,Time,Distance,Made,Missed,Total,Make%,PGA Tour Avg %,Delta vs PGA,Streak\n';
+
+  sessions.forEach(function(s, i){
+    var d = new Date(s.date);
+    var dateStr = d.toLocaleDateString();
+    var timeStr = d.toLocaleTimeString();
+
+    DISTANCES.forEach(function(dist){
+      var st = s.stats[dist];
+      var total = st.made + st.missed;
+      if(!total) return;
+
+      var makePct = Math.round(st.made / total * 100);
+      var pga = PGA_TOUR_AVG[dist];
+      var delta = makePct - pga;
+
+      csv += (i+1) + ',' + dateStr + ',' + timeStr + ',' + dist + ',' +
+             st.made + ',' + st.missed + ',' + total + ',' +
+             makePct + ',' + pga + ',' + delta + ',' +
+             (s.bestStreaks[dist] || 0) + '\n';
+    });
+
+    csv += (i+1) + ',' + dateStr + ',' + timeStr + ',SUMMARY,' +
+           s.summary.made + ',' + s.summary.missed + ',' +
+           s.summary.total + ',' + s.summary.pct + ',,,\n';
+  });
+
+  var blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'foreputt_history.csv';
+  a.click();
+}
+
+// ---------- History ----------
+function renderHistory(){
+  var h = $('history');
+  h.innerHTML = '';
+
+  if(!sessions.length){
+    h.innerHTML = '<p style="opacity:.8">No sessions yet.</p>';
+    return;
+  }
+
+  sessions.slice().reverse().forEach(function(s, i){
+    var idx = sessions.length - 1 - i;
+
+    var wrap = document.createElement('div');
+    wrap.className = 'history-wrapper';
+
+    var card = document.createElement('div');
+    card.className = 'history-card';
+
+    var acc = document.createElement('div');
+    acc.className = 'accordion';
+
+    card.innerHTML = '<strong>Session ' + (idx+1) + '</strong><br>' +
+      new Date(s.date).toLocaleDateString() + ' • ' +
+      s.summary.pct + '% (' + s.summary.total + ' putts)';
+
+    card.onclick = function(){
+      acc.style.display = acc.style.display === 'block' ? 'none' : 'block';
+    };
+
+    DISTANCES.forEach(function(d){
+      var st = s.stats[d];
+      var tot = st.made + st.missed;
+      if(!tot) return;
+
+      var p = Math.round(st.made / tot * 100);
+      var star = p >= PGA_TOUR_AVG[d] ? ' ⭐' : '';
+
+      var row = document.createElement('div');
+      row.innerHTML = '<strong>' + d + ' ft:</strong> ' +
+        st.made + '/' + tot + ' (' + p + '%) — PGA ' +
+        PGA_TOUR_AVG[d] + '%' + star +
+        '<br><span class="subtle">Best streak: ' +
+        (s.bestStreaks[d] || 0) + '</span>';
+
+      acc.appendChild(row);
+    });
+
+    var del = document.createElement('button');
+    del.textContent = '🗑️ Delete Session';
+    del.style.background = '#E34234';
+    del.style.height = '48px';
+    del.style.fontSize = '20px';
+    del.style.lineHeight = '20px';
+    del.style.boxShadow = '0px 0 0 #b03026,0 5px 0 #b03026';
+
+    del.onclick = function(e){
+      e.stopPropagation();
+      if(!confirm('Delete this session?')) return;
+      sessions.splice(idx, 1);
+      saveSessions();
+      renderHistory();
+    };
+
+    acc.appendChild(del);
+    wrap.appendChild(card);
+    wrap.appendChild(acc);
+    h.appendChild(wrap);
+  });
+}
+
+// ---------- Init ----------
+buildDistanceRow();
+updateStats();
+renderHistory();
 </script>
 </body>
 </html>
