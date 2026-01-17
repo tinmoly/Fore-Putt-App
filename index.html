@@ -38,9 +38,6 @@
     /* v1.11 Logo */
     .logo-wrap{text-align:center;margin-bottom:10px}
     .app-logo{max-width:240px;width:100%;height:auto}
-      /* v1.11 Logo */
-    .logo-wrap{text-align:center;margin-bottom:10px}
-    .app-logo{max-width:240px;width:100%;height:auto}
 
     /* v1.11 Splash Screen */
     .splash{position:fixed;inset:0;background:#0b3d2e;display:flex;align-items:center;justify-content:center;z-index:9999}
@@ -56,31 +53,45 @@
 
     .splash-ball{
       position:absolute;
-      bottom:6px;           /* cup vertical center */
+      bottom:6px;           /* resting cup position */
       left:-14px;
       width:28px;
-      z-index:3;             /* above logo hole */
-      animation:ballRoll 1.4s cubic-bezier(.25,.85,.35,1) forwards;
+      z-index:3;            /* above logo hole */
+      animation:ballRoll 1.5s cubic-bezier(.25,.85,.35,1) forwards;
     }
 
     .splash-flag{
       position:absolute;
-      top:-26px;            /* start well above logo */
-      left:51.5%;            /* pole aligned to cup */
+      top:-30px;           /* start above logo */
+      left:51.5%;           /* pole aligned to cup */
       transform:translateX(-50%);
       width:52px;
-      z-index:2;             /* between logo + ball */
+      z-index:2;            /* between logo + ball */
       animation:flagDrop .9s ease-out 1.3s forwards;
     }
 
     @keyframes ballRoll{
-      to{ left:150px; }      /* cup horizontal center */
+      0%{ left:-14px; bottom:9px; }
+      70%{ left:150px; bottom:9px; }
+      75%{ left:150px; bottom:8px; }  /* ball dip */
+      80%{ left:150px; bottom:7px; }  /* ball dip */
+      85%{ left:150px; bottom:6px; }  /* ball dip */
+      95%{ left:150px; bottom:6px; }  /* ball dip */
+      100%{ left:150px; bottom:6px; } /* return to resting position */
     }
 
     @keyframes flagDrop{
-      to{ top:12px; }
-    }       /* pole lands in logo */
+      0%{ top:-30px; }
+      65%{ top:12px; }
+      70%{ top:10px; }   /* small bounce up */
+      75%{ top:8px; }   /* small bounce up */
+      80%{ top:6px; }   /* small bounce up */
+      85%{ top:6px; }   /* small bounce up */
+      90%{ top:8px; }   /* small bounce up */
+      95%{ top:10px; }   /* small bounce up */
+      100%{ top:12px; }  /* settle */
     }
+    
   </style>
 </head>
 <body>
@@ -312,7 +323,10 @@ function newSession(){
 
   saveSessions();
   stats = defaultStats();
-  streaks = loadStreaks();
+  // Clear all current streaks on new session
+  streaks = {};
+  DISTANCES.forEach(function(d){ streaks[d] = 0; });
+  saveStreaks();
   bestStreaks = defaultBestStreaks();
   puttHistory = [];
   updateStats();
