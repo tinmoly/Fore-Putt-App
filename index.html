@@ -56,40 +56,36 @@
       bottom:6px;           /* resting cup position */
       left:-14px;
       width:28px;
-      z-index:9;            /* above logo hole */
+      z-index:10;            /* above logo hole */
       animation:ballRoll 1.5s cubic-bezier(.25,.85,.35,1) forwards;
     }
 
     .splash-flag{
       position:absolute;
       top:-30px;           /* start above logo */
-      left:50.5%;           /* pole aligned to cup */
+      left:51.5%;           /* pole aligned to cup */
       transform:translateX(-50%);
-      width:52px;
+      width:60px;
       z-index:2;            /* between logo + ball */
       animation:flagDrop .9s ease-out 1.3s forwards;
     }
 
     @keyframes ballRoll{
-      0%{ left:-14px; bottom:11px; }
-      70%{ left:150px; bottom:11px; }
-      75%{ left:150px; bottom:10px; }  /* ball dip */
-      80%{ left:150px; bottom:9px; }  /* ball dip */
-      85%{ left:150px; bottom:8px; }  /* ball dip */
-      95%{ left:150px; bottom:7px; }  /* ball dip */
+      0%{ left:-14px; bottom:10px; }
+      60%{ left:150px; bottom:10px; }  
       100%{ left:150px; bottom:6px; } /* return to resting position */
     }
 
     @keyframes flagDrop{
       0%{ top:-30px; }
-      65%{ top:16px; }
-      70%{ top:14px; }   /* small bounce up */
-      75%{ top:12px; }   /* small bounce up */
-      80%{ top:10px; }   /* small bounce up */
-      85%{ top:10px; }   /* small bounce up */
-      90%{ top:12px; }   /* small bounce up */
-      95%{ top:14px; }   /* small bounce up */
-      100%{ top:16px; }  /* settle */
+      65%{ top:6px; }
+      70%{ top:4px; }   /* small bounce up */
+      75%{ top:2px; }   /* small bounce up */
+      80%{ top:0px; }   /* small bounce up */
+      85%{ top:0px; }   /* small bounce up */
+      90%{ top:2px; }   /* small bounce up */
+      95%{ top:4px; }   /* small bounce up */
+      100%{ top:6px; }  /* settle */
     }
     
   </style>
