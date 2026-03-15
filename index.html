@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Fore!Putt Practice App — Version 1.11</title>
+<title>Fore!Putt Practice App — Version 3</title>
 
 <style>
 body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0b3d2e;color:#fff;margin:0;padding:20px}
@@ -20,26 +20,29 @@ h1,h3{text-align:center;margin-bottom:10px}
 .distance-btn{background:#1c7c5b;border:none;padding:10px 20px;border-radius:999px;font-weight:800;color:#fff;cursor:pointer;white-space:nowrap;font-size:24px}
 .distance-btn.active{background:#2ecc71;color:#000}
 
-/* Circular Made/Missed control */
-.putt-ring{width:260px;height:260px;border-radius:50%;background:#E34234;display:flex;align-items:center;justify-content:center;box-shadow:6px 0 0 #b03026,0 6px 0 #b03026,0 18px 32px rgba(0,0,0,.45);cursor:pointer;margin:10px auto;position:relative}
+.putt-ring{width:320px;height:320px;border-radius:50%;position:relative;margin:10px auto}
 
-.made-inner{width:120px;height:120px;border-radius:50%;background:#2ecc71;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:#000;box-shadow:3px 0 0 #1e9e54,0 3px 0 #1e9e54,0 10px 20px rgba(0,0,0,.35);border-bottom:3px solid #1e9e54;border-right:3px solid #1e9e54;cursor:pointer;text-align:center;line-height:1.1}
+.putt-ring::before,.putt-ring::after{content:"";position:absolute;background:#000;opacity:.9;pointer-events:none;z-index:4}
+.putt-ring::before{width:2px;height:100%;left:50%;top:0;transform:translateX(-50%) rotate(45deg)}
+.putt-ring::after{width:2px;height:100%;left:50%;top:0;transform:translateX(-50%) rotate(-45deg)}
 
-.made-inner:active{transform:translateY(3px) scale(.97);box-shadow:1px 0 0 #1e9e54,0 1px 0 #1e9e54,0 6px 12px rgba(0,0,0,.35)}
+.miss-wedge{position:absolute;inset:0;border-radius:50%;background:#E34234;cursor:pointer;-webkit-mask:radial-gradient(circle at center, transparent 0 70px, black 71px);mask:radial-gradient(circle at center, transparent 0 70px, black 71px)}
+.miss-wedge:hover{filter:brightness(1.1)}
+.miss-wedge:active{transform:scale(.97) translateY(3px);filter:brightness(.95)}
 
-.putt-ring.missed-press{transform:translateY(3px) scale(.98);box-shadow:1px 0 0 #b03026,0 1px 0 #b03026,0 6px 12px rgba(0,0,0,.35)}
-.putt-ring.missed-pulse{animation:redPulse .35s ease-out}
+button:active{transform:translateY(3px) scale(.98);box-shadow:0 2px 0 rgba(0,0,0,.35)!important}
 
-@keyframes redPulse{
-0%{box-shadow:0 0 0 0 rgba(227,66,52,.7),3px 0 0 #b03026,0 3px 0 #b03026,0 10px 20px rgba(0,0,0,.35)}
-70%{box-shadow:0 0 0 16px rgba(227,66,52,0),3px 0 0 #b03026,0 3px 0 #b03026,0 10px 20px rgba(0,0,0,.35)}
-100%{box-shadow:0 0 0 0 rgba(227,66,52,0),3px 0 0 #b03026,0 3px 0 #b03026,0 10px 20px rgba(0,0,0,.35)}
-}
+.miss-top{clip-path:polygon(50% 50%,0% 0%,100% 0%)}
+.miss-bottom{clip-path:polygon(50% 50%,100% 100%,0% 100%)}
+.miss-left{clip-path:polygon(50% 50%,0% 100%,0% 0%)}
+.miss-right{clip-path:polygon(50% 50%,100% 0%,100% 100%)}
 
-.missed-label{font-weight:800;font-size:22px;color:#000;pointer-events:none;position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;line-height:1.1}
+.made-inner{width:140px;height:140px;border-radius:50%;background:#2ecc71;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:#000;box-shadow:3px 0 0 #1e9e54,0 3px 0 #1e9e54,0 10px 20px rgba(0,0,0,.35);border-bottom:3px solid #1e9e54;border-right:3px solid #1e9e54;cursor:pointer;text-align:center;line-height:1.1;position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);z-index:5}
+.made-inner:active{transform:translate(-50%,-52%) translateY(3px) scale(.97);box-shadow:1px 0 0 #1e9e54,0 1px 0 #1e9e54,0 6px 12px rgba(0,0,0,.35)}
 
 .stats{text-align:center;font-size:18px;margin-top:20px}
-.stats p{margin:6px 0;text-align:center}
+.stats p{margin:6px 0}
+
 .badge{margin-top:10px;padding:10px;border-radius:10px;text-align:center;background:#0e4f3a}
 .badge.met{background:#1f7a4a}
 .badge.not-met{background:#6b2a2a}
@@ -51,21 +54,10 @@ h1,h3{text-align:center;margin-bottom:10px}
 
 .logo-wrap{text-align:center;margin-bottom:10px}
 .app-logo{max-width:240px;width:100%;height:auto}
-
-.splash{position:fixed;inset:0;background:#0b3d2e;display:flex;align-items:center;justify-content:center;z-index:9999}
-.splash.hidden{opacity:0;pointer-events:none;transition:opacity .6s ease}
-.splash-inner{position:relative;width:360px}
-.splash-logo{width:100%;display:block}
 </style>
 </head>
 
 <body>
-
-<div class="splash" id="splash" style="display:none">
-<div class="splash-inner">
-<img src="splash-logo.png" class="splash-logo" alt="Fore!Putt" />
-</div>
-</div>
 
 <div class="card">
 
@@ -77,9 +69,16 @@ h1,h3{text-align:center;margin-bottom:10px}
 <div id="distanceRow" class="distance-row"></div>
 
 <div style="display:flex;flex-direction:column;align-items:center;">
-<div class="putt-ring" onclick="recordMissed()">
-<div class="made-inner" onclick="event.stopPropagation();recordMade();">Made<br>✅</div>
-<div class="missed-label">Missed<br>⛔</div>
+
+<div class="putt-ring">
+
+<div class="miss-wedge miss-top" onclick="recordMissed('long')"><span style="position:absolute;top:18px;left:50%;transform:translateX(-50%);font-weight:800;color:#000;font-size:24px">Long</span></div>
+<div class="miss-wedge miss-bottom" onclick="recordMissed('short')"><span style="position:absolute;bottom:18px;left:50%;transform:translateX(-50%);font-weight:800;color:#000;font-size:24px">Short</span></div>
+<div class="miss-wedge miss-left" onclick="recordMissed('left')"><span style="position:absolute;left:18px;top:50%;transform:translateY(-50%);font-weight:800;color:#000;font-size:24px">Left</span></div>
+<div class="miss-wedge miss-right" onclick="recordMissed('right')"><span style="position:absolute;right:18px;top:50%;transform:translateY(-50%);font-weight:800;color:#000;font-size:24px">Right</span></div>
+
+<div class="made-inner" onclick="event.stopPropagation();recordMade();">✅<br>Made</div>
+
 </div>
 </div>
 
@@ -92,8 +91,8 @@ h1,h3{text-align:center;margin-bottom:10px}
 <div id="targetBadge" class="badge"></div>
 
 <div style="display:flex;justify-content:space-between;gap:16px;margin-top:10px;width:100%;">
-<button onclick="newSession()" style="flex:1;background:#0096FF;color:#000;padding:6px 10px;font-size:20px;font-weight:800;font-family:inherit;border:none;border-radius:12px;box-shadow:0 6px 0 #0074c7,0 14px 22px rgba(0,0,0,.45);cursor:pointer;">🔄 New Session</button>
-<button onclick="undoPutt()" style="flex:1;background:#8a8a8a;color:#000;padding:6px 10px;font-size:20px;font-weight:800;font-family:inherit;border:none;border-radius:12px;box-shadow:0 6px 0 #666666,0 14px 22px rgba(0,0,0,.45);cursor:pointer;">↩️ Undo Last Putt</button>
+<button onclick="newSession()" style="flex:1;background:#0096FF;color:#000;padding:6px 10px;font-size:20px;font-weight:800;border:none;border-radius:12px;box-shadow:0 6px 0 #0074c7,0 14px 22px rgba(0,0,0,.45);cursor:pointer;">🔄 New Session</button>
+<button onclick="undoPutt()" style="flex:1;background:#8a8a8a;color:#000;padding:6px 10px;font-size:20px;font-weight:800;border:none;border-radius:12px;box-shadow:0 6px 0 #666,0 14px 22px rgba(0,0,0,.45);cursor:pointer;">↩️ Undo Last Putt</button>
 </div>
 
 <div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px">
@@ -121,363 +120,384 @@ let bestStreaks
 let sessions
 let puttHistory=[]
 
-const $=id=>document.getElementById(id)
+const $=(id)=>{
+ const el=document.getElementById(id)
+ if(!el)throw new Error(`Missing DOM element: ${id}`)
+ return el
+}
 
 let tapLocked=false
 const TAP_DELAY=300
 
-function withTapLock(fn){
-if(tapLocked)return
- tapLocked=true
- fn()
- setTimeout(()=>tapLocked=false,TAP_DELAY)
-}
-
-function flash(cls){
-document.body.classList.add(cls)
-setTimeout(()=>document.body.classList.remove(cls),150)
-}
-
+function withTapLock(fn){if(tapLocked)return;tapLocked=true;fn();setTimeout(()=>tapLocked=false,TAP_DELAY)}
+function flash(cls){document.body.classList.add(cls);setTimeout(()=>document.body.classList.remove(cls),150)}
 function haptic(ms){if(navigator.vibrate)navigator.vibrate(ms)}
 
-function getStreakEmojis(v){
-if(v>=10)return"🔥🔥🔥🔥🔥"
-if(v>=7)return"🔥🔥🔥🔥"
-if(v>=5)return"🔥🔥🔥"
-if(v>=3)return"🔥🔥"
-if(v>=1)return"🔥"
-return""
-}
+function getStreakEmojis(v){if(v>=10)return"🔥🔥🔥🔥🔥";if(v>=7)return"🔥🔥🔥🔥";if(v>=5)return"🔥🔥🔥";if(v>=3)return"🔥🔥";if(v>=1)return"🔥";return""}
 
-function defaultStats(){
-let o={}
-DISTANCES.forEach(d=>o[d]={made:0,missed:0})
-return o
-}
+function defaultStats(){let o={};DISTANCES.forEach(d=>o[d]={made:0,missed:0,missDir:{short:0,long:0,left:0,right:0}});return o}
 
-function loadStats(){return JSON.parse(localStorage.getItem("puttingStats"))||defaultStats()}
+function loadStats(){try{return JSON.parse(localStorage.getItem("puttingStats"))||defaultStats()}catch{return defaultStats()}}
 function saveStats(){localStorage.setItem("puttingStats",JSON.stringify(stats))}
 
-function loadStreaks(){
-let s=JSON.parse(localStorage.getItem("puttingStreaks"))||{}
-let o={}
-DISTANCES.forEach(d=>o[d]=s[d]||0)
-return o
-}
-
+function loadStreaks(){let s=JSON.parse(localStorage.getItem("puttingStreaks"))||{};let o={};DISTANCES.forEach(d=>o[d]=s[d]||0);return o}
 function saveStreaks(){localStorage.setItem("puttingStreaks",JSON.stringify(streaks))}
 
-function defaultBestStreaks(){
-let o={}
-DISTANCES.forEach(d=>o[d]=0)
-return o
-}
+function defaultBestStreaks(){let o={};DISTANCES.forEach(d=>o[d]=0);return o}
 
-function loadSessions(){return JSON.parse(localStorage.getItem("puttingSessions"))||[]}
+function loadSessions(){try{return JSON.parse(localStorage.getItem("puttingSessions"))||[]}catch{return[]}}
 function saveSessions(){localStorage.setItem("puttingSessions",JSON.stringify(sessions))}
 
 function buildDistanceRow(){
-const r=$("distanceRow")
-if(!r)return
-
-r.innerHTML=""
-
-DISTANCES.forEach(d=>{
-const b=document.createElement("button")
-b.className="distance-btn"+(d===currentDistance?" active":"")
-b.textContent=d+"'"
-b.onclick=()=>setDistance(d)
-r.appendChild(b)
-})
+ const r=$("distanceRow")
+ r.innerHTML=""
+ DISTANCES.forEach(d=>{
+  const b=document.createElement("button")
+  b.className="distance-btn"+(d===currentDistance?" active":"")
+  b.textContent=d+"'"
+  b.onclick=()=>setDistance(d)
+  r.appendChild(b)
+ })
 }
 
 function setDistance(d){
-currentDistance=d
-streaks[d]=0
-saveStreaks()
-
-const title=$("distanceTitle")
-if(title)title.textContent=d+"-Foot Putts"
-
-buildDistanceRow()
-updateStats()
+ currentDistance=d
+ streaks[d]=0
+ saveStreaks()
+ $("distanceTitle").textContent=d+"-Foot Putts"
+ buildDistanceRow()
+ updateStats()
 }
 
 function updateStats(){
-if(!$("made"))return
+ const st=stats[currentDistance]
+ const made=st.made
+ const missed=st.missed
+ const total=made+missed
+ const pct=total?Math.round(made/total*100):0
 
-let made=stats[currentDistance].made
-let missed=stats[currentDistance].missed
-let total=made+missed
-let pct=total?Math.round(made/total*100):0
+ $("made").textContent=made
+ $("missed").textContent=missed
+ $("percent").textContent=pct
 
-$("made").textContent=made
-$("missed").textContent=missed
-$("percent").textContent=pct
+ const s=streaks[currentDistance]||0
+ $("streak").textContent=s
+ $("streakLabel").textContent=(getStreakEmojis(s)+" Streak").trim()
 
-let s=streaks[currentDistance]||0
-$("streak").textContent=s
-$("streakLabel").textContent=(getStreakEmojis(s)+" Streak").trim()
-
-let target=PGA_TOUR_AVG[currentDistance]
-let badge=$("targetBadge")
-
-badge.className="badge "+(pct>=target?"met":"not-met")
-
-badge.innerHTML=pct>=target
-?"🏆 Better than PGA Tour Avg!<br>🎯 Target: "+target+"%"
-:"🎯 Target: "+target+"% PGA Tour Avg"
+ const target=PGA_TOUR_AVG[currentDistance]
+ const badge=$("targetBadge")
+ badge.className="badge "+(pct>=target?"met":"not-met")
+ badge.innerHTML=pct>=target?"🏆 Better than PGA Tour Avg!<br>🎯 Target: "+target+"%":"🎯 Target: "+target+"% PGA Tour Avg"
 }
 
 function recordMade(){
-withTapLock(()=>{
-stats[currentDistance].made++
-streaks[currentDistance]++
+ withTapLock(()=>{
+  stats[currentDistance].made++
+  streaks[currentDistance]++
 
-if(streaks[currentDistance]>bestStreaks[currentDistance]){
-bestStreaks[currentDistance]=streaks[currentDistance]
+  if(streaks[currentDistance]>bestStreaks[currentDistance]){
+   bestStreaks[currentDistance]=streaks[currentDistance]
+  }
+
+  puttHistory.push({type:"made",distance:currentDistance})
+
+  flash("flash-green")
+  haptic(20)
+
+  saveStats()
+  saveStreaks()
+  updateStats()
+ })
 }
 
-puttHistory.push({type:"made",distance:currentDistance})
+function recordMissed(dir){
+ withTapLock(()=>{
+  const st=stats[currentDistance]
 
-flash("flash-green")
-haptic(20)
+  st.missed++
 
-saveStats()
-saveStreaks()
-updateStats()
-})
-}
+  if(dir && st.missDir && dir in st.missDir){
+   st.missDir[dir]++
+  }
 
-function recordMissed(){
-withTapLock(()=>{
-stats[currentDistance].missed++
-streaks[currentDistance]=0
+  streaks[currentDistance]=0
 
-puttHistory.push({type:"missed",distance:currentDistance})
+  puttHistory.push({type:"missed",distance:currentDistance,dir})
 
-const ring=document.querySelector(".putt-ring")
+  flash("flash-red")
+  haptic([10,40])
 
-if(ring){
-ring.classList.remove("missed-pulse","missed-press")
-void ring.offsetWidth
-ring.classList.add("missed-press")
-ring.classList.add("missed-pulse")
-setTimeout(()=>ring.classList.remove("missed-press"),120)
-}
-
-flash("flash-red")
-haptic([10,40])
-
-saveStats()
-saveStreaks()
-updateStats()
-})
+  saveStats()
+  saveStreaks()
+  updateStats()
+ })
 }
 
 function newSession(){
-if(!confirm("Start a new session?"))return
+ if(!confirm("Start a new session?"))return
 
-let totalMade=0
-let totalMissed=0
+ let totalMade=0,totalMissed=0
 
-Object.values(stats).forEach(d=>{
-totalMade+=d.made
- totalMissed+=d.missed
-})
+ Object.values(stats).forEach(d=>{
+  totalMade+=d.made
+  totalMissed+=d.missed
+ })
 
-let totalPutts=totalMade+totalMissed
-let overallPct=totalPutts?Math.round(totalMade/totalPutts*100):0
+ const totalPutts=totalMade+totalMissed
+ const overallPct=totalPutts?Math.round(totalMade/totalPutts*100):0
 
-sessions.push({
- date:new Date().toISOString(),
- stats:JSON.parse(JSON.stringify(stats)),
- bestStreaks:JSON.parse(JSON.stringify(bestStreaks)),
- summary:{made:totalMade,missed:totalMissed,total:totalPutts,pct:overallPct}
-})
+ sessions.push({
+  date:new Date().toISOString(),
+  stats:JSON.parse(JSON.stringify(stats)),
+  bestStreaks:JSON.parse(JSON.stringify(bestStreaks)),
+  summary:{made:totalMade,missed:totalMissed,total:totalPutts,pct:overallPct}
+ })
 
-saveSessions()
+ saveSessions()
 
-stats=defaultStats()
-streaks={}
-DISTANCES.forEach(d=>streaks[d]=0)
-saveStreaks()
+ stats=defaultStats()
+ streaks={}
+ DISTANCES.forEach(d=>streaks[d]=0)
+ saveStreaks()
 
-bestStreaks=defaultBestStreaks()
-puttHistory=[]
+ bestStreaks=defaultBestStreaks()
+ puttHistory=[]
 
-updateStats()
-renderHistory()
+ updateStats()
+ renderHistory()
 }
 
 function undoPutt(){
-if(!puttHistory.length)return
+ if(!puttHistory.length)return
 
-let last=puttHistory.pop()
-currentDistance=last.distance
+ const last=puttHistory.pop()
+ currentDistance=last.distance
 
-if(last.type==="made"&&stats[currentDistance].made>0){
-stats[currentDistance].made--
-if(streaks[currentDistance]>0)streaks[currentDistance]--
-}
+ const st=stats[currentDistance]
 
-if(last.type==="missed"&&stats[currentDistance].missed>0){
-stats[currentDistance].missed--
-}
+ if(last.type==="made" && st.made>0){
+  st.made--
+  if(streaks[currentDistance]>0)streaks[currentDistance]--
+ }
 
-saveStats()
-saveStreaks()
-updateStats()
+ if(last.type==="missed" && st.missed>0){
+  st.missed--
+  if(last.dir && st.missDir && st.missDir[last.dir]>0){
+   st.missDir[last.dir]--
+  }
+ }
+
+ saveStats()
+ saveStreaks()
+ updateStats()
 }
 
 function handleHistoryAction(){
-const sel=$("historyAction")
-if(!sel)return
+ const sel=$("historyAction")
+ const v=sel.value
+ sel.value=""
 
-const v=sel.value
-sel.value=""
+ if(v==="delete"){
+  if(!confirm("Delete all session history?"))return
+  sessions=[]
+  saveSessions()
+  renderHistory()
+ }
 
-if(v==="delete"){
-if(!confirm("Delete all session history?"))return
-sessions=[]
-saveSessions()
-renderHistory()
-}
-
-if(v==="export"){
-exportHistoryCSV()
-}
+ if(v==="export")exportHistoryCSV()
 }
 
 function exportHistoryCSV(){
-if(!sessions.length){
-alert("No session history to export.")
-return
-}
+ if(!sessions.length){alert("No session history to export.");return}
 
-let csv="Session,Date,Time,Distance,Made,Missed,Total,Make%,PGA Tour Avg %,Delta vs PGA,Streak\n"
+ let csv="Session,Date,Time,Distance,Made,Missed,Short,Long,Left,Right,Total,Make%,PGA Tour Avg %,Delta vs PGA,Streak\n"
 
-sessions.forEach((s,i)=>{
-const d=new Date(s.date)
-const dateStr=d.toLocaleDateString()
-const timeStr=d.toLocaleTimeString()
+ let gMade=0,gMissed=0,gShort=0,gLong=0,gLeft=0,gRight=0,gTotal=0
 
-DISTANCES.forEach(dist=>{
-const st=s.stats[dist]
-const total=st.made+st.missed
-if(!total)return
+ sessions.forEach((s,i)=>{
 
-const makePct=Math.round(st.made/total*100)
-const pga=PGA_TOUR_AVG[dist]
-const delta=makePct-pga
+  const d=new Date(s.date)
+  const dateStr=d.toLocaleDateString()
+  const timeStr=d.toLocaleTimeString()
 
-csv+=(i+1)+","+dateStr+","+timeStr+","+dist+","+
-st.made+","+st.missed+","+total+","+
-makePct+","+pga+","+delta+","+
-(s.bestStreaks[dist]||0)+"\n"
-})
+  let sMade=0,sMissed=0,sShort=0,sLong=0,sLeft=0,sRight=0,sTotal=0
 
-csv+=(i+1)+","+dateStr+","+timeStr+",SUMMARY,"+
-s.summary.made+","+s.summary.missed+","+
-s.summary.total+","+s.summary.pct+",,,\n"
-})
+  DISTANCES.forEach(dist=>{
 
-const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"})
-const a=document.createElement("a")
-a.href=URL.createObjectURL(blob)
-a.download="foreputt_history.csv"
-a.click()
+   const st=s.stats?.[dist]
+   if(!st)return
+
+   const missDir=st.missDir||{short:0,long:0,left:0,right:0}
+
+   const total=(st.made||0)+(st.missed||0)
+   if(!total)return
+
+   const makePct=Math.round(st.made/total*100)
+   const pga=PGA_TOUR_AVG[dist]
+   const delta=makePct-pga
+
+   csv+=(i+1)+","+dateStr+","+timeStr+","+dist+","+
+        st.made+","+st.missed+","+
+        missDir.short+","+missDir.long+","+
+        missDir.left+","+missDir.right+","+
+        total+","+
+        makePct+","+pga+","+delta+","+
+        (s.bestStreaks?.[dist]||0)+"\n"
+
+   sMade+=st.made||0
+   sMissed+=st.missed||0
+   sShort+=missDir.short||0
+   sLong+=missDir.long||0
+   sLeft+=missDir.left||0
+   sRight+=missDir.right||0
+   sTotal+=total
+
+   gMade+=st.made||0
+   gMissed+=st.missed||0
+   gShort+=missDir.short||0
+   gLong+=missDir.long||0
+   gLeft+=missDir.left||0
+   gRight+=missDir.right||0
+   gTotal+=total
+
+  })
+
+  const sPct=sTotal?Math.round(sMade/sTotal*100):0
+
+  csv+=(i+1)+",,,SESSION TOTAL,"+
+       sMade+","+
+       sMissed+","+
+       sShort+","+
+       sLong+","+
+       sLeft+","+
+       sRight+","+
+       sTotal+","+
+       sPct+"%,,,\n"
+
+ })
+
+ const gPct=gTotal?Math.round(gMade/gTotal*100):0
+
+ csv+="ALL SESSIONS,,,GRAND TOTAL,"+
+      gMade+","+
+      gMissed+","+
+      gShort+","+
+      gLong+","+
+      gLeft+","+
+      gRight+","+
+      gTotal+","+
+      gPct+"%,,,\n"
+
+ const speedTotal=gShort+gLong
+ const lineTotal=gLeft+gRight
+
+ const shortPct=speedTotal?Math.round(gShort/speedTotal*100):0
+ const longPct=speedTotal?Math.round(gLong/speedTotal*100):0
+ const leftPct=lineTotal?Math.round(gLeft/lineTotal*100):0
+ const rightPct=lineTotal?Math.round(gRight/lineTotal*100):0
+
+ csv+="ALL SESSIONS,,,MISS BIAS,,,"+
+      shortPct+"%,"+
+      longPct+"%,"+
+      leftPct+"%,"+
+      rightPct+"%,,,\n"
+
+ const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"})
+ const a=document.createElement("a")
+ a.href=URL.createObjectURL(blob)
+ a.download="foreputt_history.csv"
+ a.click()
 }
 
 function renderHistory(){
-const h=$("history")
-if(!h)return
+ const h=$("history")
+ h.innerHTML=""
 
-h.innerHTML=""
+ if(!sessions.length){
+  h.innerHTML='<p style="opacity:.8">No sessions yet.</p>'
+  return
+ }
 
-if(!sessions.length){
-h.innerHTML='<p style="opacity:.8">No sessions yet.</p>'
-return
-}
+ sessions.slice().reverse().forEach((s,i)=>{
 
-sessions.slice().reverse().forEach((s,i)=>{
-const idx=sessions.length-1-i
+  const idx=sessions.length-1-i
 
-const wrap=document.createElement("div")
-wrap.className="history-wrapper"
+  const wrap=document.createElement("div")
+  wrap.className="history-wrapper"
 
-const card=document.createElement("div")
-card.className="history-card"
+  const card=document.createElement("div")
+  card.className="history-card"
 
-const acc=document.createElement("div")
-acc.className="accordion"
+  const acc=document.createElement("div")
+  acc.className="accordion"
 
-card.innerHTML='<strong>Session '+(idx+1)+'</strong><br>'+new Date(s.date).toLocaleDateString()+' • '+s.summary.pct+'% ('+s.summary.total+' putts)'
+  card.innerHTML='<strong>Session '+(idx+1)+'</strong><br>'+new Date(s.date).toLocaleDateString()+' • '+s.summary.pct+'% ('+s.summary.total+' putts)'
 
-card.onclick=()=>{
-acc.style.display=acc.style.display==='block'?'none':'block'
-}
+  card.onclick=()=>{acc.style.display=acc.style.display==='block'?'none':'block'}
 
-DISTANCES.forEach(d=>{
-const st=s.stats[d]
-const tot=st.made+st.missed
-if(!tot)return
+  DISTANCES.forEach(d=>{
 
-const p=Math.round(st.made/tot*100)
-const star=p>=PGA_TOUR_AVG[d]?' ⭐':''
+   const st=s.stats?.[d]
+   if(!st)return
 
-const row=document.createElement("div")
-row.innerHTML='<strong>'+d+' ft:</strong> '+st.made+'/'+tot+' ('+p+'%) — PGA '+PGA_TOUR_AVG[d]+'%'+star+'<br><span class="subtle">Best streak: '+(s.bestStreaks[d]||0)+'</span>'
+   const missDir=st.missDir||{short:0,long:0,left:0,right:0}
 
-acc.appendChild(row)
-})
+   const tot=(st.made||0)+(st.missed||0)
+   if(!tot)return
 
-const del=document.createElement("button")
-del.textContent="🗑️ Delete Session"
-del.style.background="#E34234"
-del.style.padding="6px 10px"
-del.style.width="100%"
-del.style.display="block"
-del.style.textAlign="center"
-del.style.fontSize="20px"
-del.style.fontWeight="800"
-del.style.fontFamily="inherit"
-del.style.border="none"
-del.style.borderRadius="12px"
-del.style.marginTop="12px"
-del.style.boxShadow="0 6px 0 #b03026,0 14px 22px rgba(0,0,0,.45)"
-del.style.cursor="pointer"
+   const p=Math.round(st.made/tot*100)
+   const star=p>=PGA_TOUR_AVG[d]?' ⭐':''
 
-del.onclick=(e)=>{
-e.stopPropagation()
-if(!confirm("Delete this session?"))return
-sessions.splice(idx,1)
-saveSessions()
-renderHistory()
-}
+   const row=document.createElement("div")
 
-acc.appendChild(del)
-wrap.appendChild(card)
-wrap.appendChild(acc)
-h.appendChild(wrap)
-})
+   row.innerHTML='<strong>'+d+' ft:</strong> '+st.made+'/'+tot+' ('+p+'%) — PGA '+PGA_TOUR_AVG[d]+'%'+star+
+   '<br><span class="subtle">Misses — Short:'+missDir.short+' Long:'+missDir.long+' Left:'+missDir.left+' Right:'+missDir.right+' | Best streak: '+(s.bestStreaks?.[d]||0)+'</span>'
+
+   acc.appendChild(row)
+  })
+
+  const del=document.createElement("button")
+  del.textContent="🗑️ Delete Session"
+  del.style.background="#E34234"
+  del.style.padding="6px 10px"
+  del.style.width="100%"
+  del.style.fontSize="20px"
+  del.style.fontWeight="800"
+  del.style.border="none"
+  del.style.borderRadius="12px"
+  del.style.marginTop="12px"
+  del.style.boxShadow="0 6px 0 #b03026,0 14px 22px rgba(0,0,0,.45)"
+
+  del.onclick=(e)=>{
+   e.stopPropagation()
+   if(!confirm("Delete this session?"))return
+   sessions.splice(idx,1)
+   saveSessions()
+   renderHistory()
+  }
+
+  acc.appendChild(del)
+
+  wrap.appendChild(card)
+  wrap.appendChild(acc)
+  h.appendChild(wrap)
+ })
 }
 
 function initApp(){
-stats=loadStats()
-streaks=loadStreaks()
-bestStreaks=defaultBestStreaks()
-sessions=loadSessions()
-
-buildDistanceRow()
-updateStats()
-renderHistory()
+ stats=loadStats()
+ streaks=loadStreaks()
+ bestStreaks=defaultBestStreaks()
+ sessions=loadSessions()
+ buildDistanceRow()
+ updateStats()
+ renderHistory()
 }
 
 if(document.readyState==='loading'){
-document.addEventListener('DOMContentLoaded',initApp)
+ document.addEventListener('DOMContentLoaded',initApp)
 }else{
-initApp()
+ initApp()
 }
 
 </script>
