@@ -20,13 +20,13 @@ h1,h3{text-align:center;margin-bottom:10px}
 .distance-btn{background:#1c7c5b;border:none;padding:10px 20px;border-radius:999px;font-weight:800;color:#fff;cursor:pointer;white-space:nowrap;font-size:24px}
 .distance-btn.active{background:#2ecc71;color:#000}
 
-.putt-ring{width:310px;height:310px;border-radius:50%;position:relative;margin:10px auto}
+.putt-ring{width:290px;height:290px;border-radius:50%;position:relative;margin:10px auto}
 
 .putt-ring::before,.putt-ring::after{content:"";position:absolute;background:#000;opacity:.9;pointer-events:none;z-index:4}
 .putt-ring::before{width:2px;height:100%;left:50%;top:0;transform:translateX(-50%) rotate(45deg)}
 .putt-ring::after{width:2px;height:100%;left:50%;top:0;transform:translateX(-50%) rotate(-45deg)}
 
-.miss-wedge{position:absolute;inset:0;border-radius:50%;background:#E34234;cursor:pointer;-webkit-mask:radial-gradient(circle at center, transparent 0 60px, black 61px);mask:radial-gradient(circle at center, transparent 0 60px, black 61px)}
+.miss-wedge{position:absolute;inset:0;border-radius:50%;background:#E34234;cursor:pointer;-webkit-mask:radial-gradient(circle at center, transparent 0 55px, black 56px);mask:radial-gradient(circle at center, transparent 0 55px, black 56px)}
 .miss-wedge:hover{filter:brightness(1.1)}
 .miss-wedge:active{transform:scale(.97) translateY(3px);filter:brightness(.95)}
 
@@ -37,7 +37,7 @@ button:active{transform:translateY(3px) scale(.98);box-shadow:0 2px 0 rgba(0,0,0
 .miss-left{clip-path:polygon(50% 50%,0% 100%,0% 0%)}
 .miss-right{clip-path:polygon(50% 50%,100% 0%,100% 100%)}
 
-.made-inner{width:120px;height:120px;border-radius:50%;background:#2ecc71;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:#000;box-shadow:3px 0 0 #1e9e54,0 3px 0 #1e9e54,0 10px 20px rgba(0,0,0,.35);border-bottom:3px solid #1e9e54;border-right:3px solid #1e9e54;cursor:pointer;text-align:center;line-height:1.1;position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);z-index:5}
+.made-inner{width:110px;height:110px;border-radius:50%;background:#2ecc71;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:#000;box-shadow:3px 0 0 #1e9e54,0 3px 0 #1e9e54,0 10px 20px rgba(0,0,0,.35);border-bottom:3px solid #1e9e54;border-right:3px solid #1e9e54;cursor:pointer;text-align:center;line-height:1.1;position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);z-index:5}
 .made-inner:active{transform:translate(-50%,-52%) translateY(3px) scale(.97);box-shadow:1px 0 0 #1e9e54,0 1px 0 #1e9e54,0 6px 12px rgba(0,0,0,.35)}
 
 .stats{text-align:center;font-size:18px;margin-top:20px}
