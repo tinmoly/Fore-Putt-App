@@ -20,7 +20,7 @@ h1,h3{text-align:center;margin-bottom:10px}
 .distance-btn{background:#1c7c5b;border:none;padding:10px 20px;border-radius:999px;font-weight:800;color:#fff;cursor:pointer;white-space:nowrap;font-size:24px}
 .distance-btn.active{background:#2ecc71;color:#000}
 
-.putt-ring{width:290px;height:290px;border-radius:50%;position:relative;margin:10px auto}
+.putt-ring{width:285px;height:285px;border-radius:50%;position:relative;margin:10px auto}
 
 .putt-ring::before,.putt-ring::after{content:"";position:absolute;background:#000;opacity:.9;pointer-events:none;z-index:4}
 .putt-ring::before{width:2px;height:100%;left:50%;top:0;transform:translateX(-50%) rotate(45deg)}
@@ -74,8 +74,8 @@ button:active{transform:translateY(3px) scale(.98);box-shadow:0 2px 0 rgba(0,0,0
 
 <div class="miss-wedge miss-top" onclick="recordMissed('long')"><span style="position:absolute;top:18px;left:50%;transform:translateX(-50%);font-weight:800;color:#000;font-size:24px">Long</span></div>
 <div class="miss-wedge miss-bottom" onclick="recordMissed('short')"><span style="position:absolute;bottom:18px;left:50%;transform:translateX(-50%);font-weight:800;color:#000;font-size:24px">Short</span></div>
-<div class="miss-wedge miss-left" onclick="recordMissed('left')"><span style="position:absolute;left:18px;top:50%;transform:translateY(-50%);font-weight:800;color:#000;font-size:24px">Left</span></div>
-<div class="miss-wedge miss-right" onclick="recordMissed('right')"><span style="position:absolute;right:18px;top:50%;transform:translateY(-50%);font-weight:800;color:#000;font-size:24px">Right</span></div>
+<div class="miss-wedge miss-left" onclick="recordMissed('left')"><span style="position:absolute;left:21px;top:50%;transform:translateY(-50%);font-weight:800;color:#000;font-size:24px">Left</span></div>
+<div class="miss-wedge miss-right" onclick="recordMissed('right')"><span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);font-weight:800;color:#000;font-size:24px">Right</span></div>
 
 <div class="made-inner" onclick="event.stopPropagation();recordMade();">✅<br>Made</div>
 
