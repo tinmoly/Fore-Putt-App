@@ -373,9 +373,47 @@ function exportHistoryCSV(){
        fmt(missTotals.longRight,pctLR)+","+
        fmt(missTotals.longLeft,pctLL)+","+
        fmt(missTotals.shortRight,pctSR)+","+
-       (sum.total||0)+","+(sum.pct||0)+",,,"+"\n\n"
+       (sum.total||0)+","+(sum.pct||0)+",,,\n\n"
 
  })
+
+ // GRAND TOTAL
+ let grand={made:0,missed:0,shortLeft:0,longRight:0,longLeft:0,shortRight:0}
+
+ sessions.forEach(s=>{
+   const sum=s.summary||{}
+   grand.made+=(sum.made||0)
+   grand.missed+=(sum.missed||0)
+
+   DISTANCES.forEach(dist=>{
+     const st=s.stats?.[dist]
+     if(!st)return
+     const md=st.missDir||{}
+     grand.shortLeft+=(md.shortLeft||0)
+     grand.longRight+=(md.longRight||0)
+     grand.longLeft+=(md.longLeft||0)
+     grand.shortRight+=(md.shortRight||0)
+   })
+ })
+
+ const totalMiss=grand.missed||0
+ const pctSL=totalMiss?Math.round(grand.shortLeft/totalMiss*100):0
+ const pctLR=totalMiss?Math.round(grand.longRight/totalMiss*100):0
+ const pctLL=totalMiss?Math.round(grand.longLeft/totalMiss*100):0
+ const pctSR=totalMiss?Math.round(grand.shortRight/totalMiss*100):0
+
+ const totalPutts=grand.made+grand.missed
+ const makePct=totalPutts?Math.round(grand.made/totalPutts*100):0
+
+ const fmt=(count,pct)=>count+" ("+pct+"%)"
+
+ csv+="TOTAL,,,ALL,"+
+      grand.made+","+grand.missed+","+
+      fmt(grand.shortLeft,pctSL)+","+
+      fmt(grand.longRight,pctLR)+","+
+      fmt(grand.longLeft,pctLL)+","+
+      fmt(grand.shortRight,pctSR)+","+
+      totalPutts+","+makePct+",,,\n"
 
  const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"})
  const a=document.createElement("a")
