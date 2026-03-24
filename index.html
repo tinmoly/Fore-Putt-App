@@ -464,7 +464,7 @@ function renderHistory(){
    const row=document.createElement("div")
 
    row.innerHTML='<strong>'+d+' ft:</strong> '+st.made+'/'+tot+' ('+p+'%) — PGA '+PGA_TOUR_AVG[d]+'%'+star+
-   '<br><span class="subtle">Misses — Short Left: '+missDir.shortLeft+' | Long Right: '+missDir.longRight+' | Long Left: '+missDir.longLeft+' | Short Right: '+missDir.shortRight+' | Best streak: '+(s.bestStreaks?.[d]||0)+'</span>'
+   '<br><span class="subtle">Misses — L-Left: '+missDir.longLeft+' | L-Right: '+missDir.longRight+' | S-Left: '+missDir.shortLeft+' | S-Right: '+missDir.shortRight+' | Best streak: '+(s.bestStreaks?.[d]||0)+'</span>'
 
    acc.appendChild(row)
   })
