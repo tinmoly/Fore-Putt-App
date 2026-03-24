@@ -464,7 +464,7 @@ function renderHistory(){
    const row=document.createElement("div")
 
    row.innerHTML='<strong>'+d+' ft:</strong> '+st.made+'/'+tot+' ('+p+'%) — PGA '+PGA_TOUR_AVG[d]+'%'+star+
-   '<br><span class="subtle">Misses — Short Left:'+missDir.shortLeft+' Long Right:'+missDir.longRight+' Long Left:'+missDir.longLeft+' Short Right:'+missDir.shortRight+' | Best streak: '+(s.bestStreaks?.[d]||0)+'</span>'
+   '<br><span class="subtle">Misses — Short Left:'+missDir.shortLeft+' | Long Right:'+missDir.longRight+' | Long Left:'+missDir.longLeft+' | Short Right:'+missDir.shortRight+' | Best streak: '+(s.bestStreaks?.[d]||0)+'</span>'
 
    acc.appendChild(row)
   })
@@ -498,6 +498,8 @@ function renderHistory(){
 }
 
 function initApp(){
+
+ 
  stats=loadStats()
  streaks=loadStreaks()
  bestStreaks=defaultBestStreaks()
