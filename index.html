@@ -283,7 +283,7 @@ function updateStats(){
  const target=PGA_TOUR_AVG[currentDistance]
  const badge=$("targetBadge")
  badge.className="badge "+(pct>=target?"met":"not-met")
- badge.innerHTML=pct>=target?"🏆 Better than PGA Tour Avg!<br> Target: "+target+"%":"🎯 Target: "+target+"% PGA Tour Avg"
+ badge.innerHTML=pct>=target?"🏆 Better than PGA Tour Avg!<br>🎯 Target: "+target+"%":"🎯 Target: "+target+"% PGA Tour Avg"
 }
 
 function recordMade(){
@@ -553,7 +553,7 @@ function renderHistory(){
    if(!tot)return
 
    const p=Math.round(st.made/tot*100)
-   const star=p>=PGA_TOUR_AVG[d]?' *':''
+   const star=p>=PGA_TOUR_AVG[d]?' ⭐':''
 
    const row=document.createElement("div")
 
