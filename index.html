@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Fore!Putt Practice App — Version 3</title>
+<!-- saved from url=(0056)file:///G:/My%20Drive/Golf/Fore!Putt%20App/index_v6.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fore!Putt Practice App - Version 6</title>
 
 <style>
 body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0b3d2e;color:#fff;margin:0;padding:20px}
@@ -57,25 +57,25 @@ button:active{transform:translateY(3px) scale(.98);box-shadow:0 2px 0 rgba(0,0,0
 </style>
 </head>
 
-<body>
+<body class="">
 
 <div class="card">
 
 <div class="logo-wrap">
-<img src="foreputt-logo.png" alt="Fore!Putt Logo" class="app-logo" />
+<img src="./index_files/foreputt-logo.png" alt="Fore!Putt Logo" class="app-logo">
 </div>
 
-<h1 id="distanceTitle">2-Foot Putts</h1>
-<div id="distanceRow" class="distance-row"></div>
+<h1 id="distanceTitle">20-Foot Putts</h1>
+<div id="distanceRow" class="distance-row"><button class="distance-btn">2'</button><button class="distance-btn">3'</button><button class="distance-btn">4'</button><button class="distance-btn">5'</button><button class="distance-btn">6'</button><button class="distance-btn">7'</button><button class="distance-btn">8'</button><button class="distance-btn">9'</button><button class="distance-btn">10'</button><button class="distance-btn">12'</button><button class="distance-btn">15'</button><button class="distance-btn">18'</button><button class="distance-btn active">20'</button><button class="distance-btn">25'</button><button class="distance-btn">30'</button></div>
 
 <div style="display:flex;flex-direction:column;align-items:center;">
 
 <div class="putt-ring">
 
-<div class="miss-wedge miss-topright" onclick="recordMissed('longRight')"><span style="position:absolute;top:10px;left:50%;transform:translateX(-50%) rotate(0deg);font-weight:800;color:#000;font-size:24px"><span style="display:inline-block;margin-left:9px;">Long</span><br><span style="display:inline-block;margin-left:6px;">Right</span></span></div>
-<div class="miss-wedge miss-bottomleft" onclick="recordMissed('shortLeft')"><span style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%) rotate(0deg);font-weight:800;color:#000;font-size:24px">Short<br><span style="display:inline-block;margin-left:6px;">Left</span></span></div>
-<div class="miss-wedge miss-topleft" onclick="recordMissed('longLeft')"><span style="position:absolute;left:10px;top:50%;transform:translateY(-50%) rotate(-90deg);font-weight:800;color:#000;font-size:24px">Long<br><span style="display:inline-block;margin-left:6px;">Left</span></span></div>
-<div class="miss-wedge miss-bottomright" onclick="recordMissed('shortRight')"><span style="position:absolute;right:10px;top:50%;transform:translateY(-50%) rotate(270deg);font-weight:800;color:#000;font-size:24px"><span style="display:inline-block;margin-left:6px;">Short</span><br><span style="display:inline-block;margin-left:6px;">Right</span></span></div>
+<div class="miss-wedge miss-topright" onclick="recordMissed(&#39;longRight&#39;)"><span style="position:absolute;top:10px;left:50%;transform:translateX(-50%) rotate(0deg);font-weight:800;color:#000;font-size:24px"><span style="display:inline-block;margin-left:9px;">Long</span><br><span style="display:inline-block;margin-left:6px;">Right</span></span></div>
+<div class="miss-wedge miss-bottomleft" onclick="recordMissed(&#39;shortLeft&#39;)"><span style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%) rotate(0deg);font-weight:800;color:#000;font-size:24px">Short<br><span style="display:inline-block;margin-left:6px;">Left</span></span></div>
+<div class="miss-wedge miss-topleft" onclick="recordMissed(&#39;longLeft&#39;)"><span style="position:absolute;left:10px;top:50%;transform:translateY(-50%) rotate(-90deg);font-weight:800;color:#000;font-size:24px">Long<br><span style="display:inline-block;margin-left:6px;">Left</span></span></div>
+<div class="miss-wedge miss-bottomright" onclick="recordMissed(&#39;shortRight&#39;)"><span style="position:absolute;right:10px;top:50%;transform:translateY(-50%) rotate(270deg);font-weight:800;color:#000;font-size:24px"><span style="display:inline-block;margin-left:6px;">Short</span><br><span style="display:inline-block;margin-left:6px;">Right</span></span></div>
 
 <div class="made-inner" onclick="event.stopPropagation();recordMade();">Made</div>
 
@@ -84,11 +84,11 @@ button:active{transform:translateY(3px) scale(.98);box-shadow:0 2px 0 rgba(0,0,0
 
 <div class="stats">
 <p> Made: <span id="made">0</span> |  Missed: <span id="missed">0</span></p>
-<p>⛳ Make %: <span id="percent">0</span>%</p>
+<p>Make %: <span id="percent">0</span>%</p>
 <p><span id="streakLabel">Streak</span>: <span id="streak">0</span></p>
 </div>
 
-<div id="targetBadge" class="badge"></div>
+<div id="targetBadge" class="badge not-met"> Target: 15% PGA Tour Avg</div>
 
 <div style="display:flex;justify-content:space-between;gap:16px;margin-top:10px;width:100%;">
 <button onclick="newSession()" style="flex:1;background:#0096FF;color:#000;padding:6px 10px;font-size:20px;font-weight:800;border:none;border-radius:12px;box-shadow:0 6px 0 #0074c7,0 14px 22px rgba(0,0,0,.45);cursor:pointer;"> New Session</button>
@@ -104,14 +104,15 @@ button:active{transform:translateY(3px) scale(.98);box-shadow:0 2px 0 rgba(0,0,0
 </select>
 </div>
 
-<div id="history"></div>
+<div id="history"><p style="opacity:.8">No sessions yet.</p></div>
 
 </div>
 
 <script>
 
-const DISTANCES=[2,3,4,5,6,7,8,9,10,15,20,30]
-const PGA_TOUR_AVG={2:99,3:96,4:88,5:77,6:66,7:58,8:50,9:45,10:40,15:23,20:15,30:7}
+const DISTANCES=[2,3,4,5,6,7,8,9,10,12,15,18,20,25,30]
+const PGA_TOUR_BASE_AVG={2:99,3:96,4:88,5:77,6:66,7:58,8:50,9:45,10:40,15:23,20:15,30:7}
+const PGA_TOUR_AVG=buildPgaTourAverage()
 
 let currentDistance=2
 let stats
@@ -135,22 +136,113 @@ function haptic(ms){if(navigator.vibrate)navigator.vibrate(ms)}
 
 function getStreakEmojis(v){if(v>=10)return"*****";if(v>=7)return"****";if(v>=5)return"***";if(v>=3)return"**";if(v>=1)return"*";return""}
 
+function buildPgaTourAverage(){
+ const projected={...PGA_TOUR_BASE_AVG}
+
+ DISTANCES.forEach(distance=>{
+  if(projected[distance]!==undefined)return
+
+  const lower=[...Object.keys(PGA_TOUR_BASE_AVG)].map(Number).filter(v=>v<distance).sort((a,b)=>b-a)[0]
+  const upper=[...Object.keys(PGA_TOUR_BASE_AVG)].map(Number).filter(v=>v>distance).sort((a,b)=>a-b)[0]
+
+  if(lower===undefined||upper===undefined)return
+
+  const lowerValue=PGA_TOUR_BASE_AVG[lower]
+  const upperValue=PGA_TOUR_BASE_AVG[upper]
+  const ratio=(distance-lower)/(upper-lower)
+
+  projected[distance]=Math.round(lowerValue+((upperValue-lowerValue)*ratio))
+ })
+
+ return projected
+}
+
 function defaultStats(){
  let o={}
  DISTANCES.forEach(d=>o[d]={made:0,missed:0,missDir:{shortLeft:0,longRight:0,longLeft:0,shortRight:0}})
  return o
 }
 
-function loadStats(){try{return JSON.parse(localStorage.getItem("puttingStats"))||defaultStats()}catch{return defaultStats()}}
+function normalizeStatEntry(entry){
+ return {
+  made:entry?.made||0,
+  missed:entry?.missed||0,
+  missDir:{
+   shortLeft:entry?.missDir?.shortLeft||0,
+   longRight:entry?.missDir?.longRight||0,
+   longLeft:entry?.missDir?.longLeft||0,
+   shortRight:entry?.missDir?.shortRight||0
+  }
+ }
+}
+
+function loadStats(){
+ try{
+  const saved=JSON.parse(localStorage.getItem("puttingStats"))||{}
+  const normalized=defaultStats()
+  DISTANCES.forEach(d=>normalized[d]=normalizeStatEntry(saved[d]))
+  return normalized
+ }catch{
+  return defaultStats()
+ }
+}
 function saveStats(){localStorage.setItem("puttingStats",JSON.stringify(stats))}
 
-function loadStreaks(){let s=JSON.parse(localStorage.getItem("puttingStreaks"))||{};let o={};DISTANCES.forEach(d=>o[d]=s[d]||0);return o}
+function loadStreaks(){
+ let s=JSON.parse(localStorage.getItem("puttingStreaks"))||{}
+ let o={}
+ DISTANCES.forEach(d=>o[d]=s[d]||0)
+ return o
+}
 function saveStreaks(){localStorage.setItem("puttingStreaks",JSON.stringify(streaks))}
 
 function defaultBestStreaks(){let o={};DISTANCES.forEach(d=>o[d]=0);return o}
+function loadBestStreaks(){
+ let s=JSON.parse(localStorage.getItem("puttingBestStreaks"))||{}
+ let o=defaultBestStreaks()
+ DISTANCES.forEach(d=>o[d]=s[d]||0)
+ return o
+}
+function saveBestStreaks(){localStorage.setItem("puttingBestStreaks",JSON.stringify(bestStreaks))}
 
 function loadSessions(){try{return JSON.parse(localStorage.getItem("puttingSessions"))||[]}catch{return[]}}
 function saveSessions(){localStorage.setItem("puttingSessions",JSON.stringify(sessions))}
+
+function resetCurrentTracking(){
+ stats=defaultStats()
+ streaks={}
+ DISTANCES.forEach(d=>streaks[d]=0)
+ bestStreaks=defaultBestStreaks()
+ puttHistory=[]
+ currentDistance=DISTANCES[0]
+ saveStats()
+ saveStreaks()
+ saveBestStreaks()
+}
+
+function recomputeStreakStateFromHistory(){
+ const current=loadStreaks()
+ const best=defaultBestStreaks()
+
+ DISTANCES.forEach(d=>current[d]=0)
+
+ puttHistory.forEach(putt=>{
+  if(putt.type==="made"){
+   current[putt.distance]=(current[putt.distance]||0)+1
+   if(current[putt.distance]>best[putt.distance]){
+    best[putt.distance]=current[putt.distance]
+   }
+   return
+  }
+
+  if(putt.type==="missed"){
+   current[putt.distance]=0
+  }
+ })
+
+ streaks=current
+ bestStreaks=best
+}
 
 function buildDistanceRow(){
  const r=$("distanceRow")
@@ -210,6 +302,7 @@ function recordMade(){
 
   saveStats()
   saveStreaks()
+  saveBestStreaks()
   updateStats()
  })
 }
@@ -233,6 +326,7 @@ function recordMissed(dir){
 
   saveStats()
   saveStreaks()
+  saveBestStreaks()
   updateStats()
  })
 }
@@ -259,14 +353,8 @@ function newSession(){
 
  saveSessions()
 
- stats=defaultStats()
- streaks={}
- DISTANCES.forEach(d=>streaks[d]=0)
- saveStreaks()
-
- bestStreaks=defaultBestStreaks()
- puttHistory=[]
-
+ resetCurrentTracking()
+ buildDistanceRow()
  updateStats()
  renderHistory()
 }
@@ -291,8 +379,11 @@ function undoPutt(){
   }
  }
 
+ recomputeStreakStateFromHistory()
  saveStats()
  saveStreaks()
+ saveBestStreaks()
+ buildDistanceRow()
  updateStats()
 }
 
@@ -302,9 +393,12 @@ function handleHistoryAction(){
  sel.value=""
 
  if(v==="delete"){
-  if(!confirm("Delete all session history?"))return
+  if(!confirm("Delete all session history and current tracking stats?"))return
   sessions=[]
   saveSessions()
+  resetCurrentTracking()
+  buildDistanceRow()
+  updateStats()
   renderHistory()
  }
 
@@ -444,7 +538,7 @@ function renderHistory(){
   const acc=document.createElement("div")
   acc.className="accordion"
 
-  card.innerHTML='<strong>Session '+(idx+1)+'</strong><br>'+new Date(s.date).toLocaleDateString()+' • '+s.summary.pct+'% ('+s.summary.total+' putts)'
+  card.innerHTML='<strong>Session '+(idx+1)+'</strong><br>'+new Date(s.date).toLocaleDateString()+' - '+s.summary.pct+'% ('+s.summary.total+' putts)'
 
   card.onclick=()=>{acc.style.display=acc.style.display==='block'?'none':'block'}
 
@@ -463,8 +557,8 @@ function renderHistory(){
 
    const row=document.createElement("div")
 
-   row.innerHTML='<strong>'+d+' ft:</strong> '+st.made+'/'+tot+' ('+p+'%) — PGA '+PGA_TOUR_AVG[d]+'%'+star+
-   '<br><span class="subtle">Misses — L-Left: '+missDir.longLeft+' | L-Right: '+missDir.longRight+' | S-Left: '+missDir.shortLeft+' | S-Right: '+missDir.shortRight+' | Best streak: '+(s.bestStreaks?.[d]||0)+'</span>'
+   row.innerHTML='<strong>'+d+' ft:</strong> '+st.made+'/'+tot+' ('+p+'%) - PGA '+PGA_TOUR_AVG[d]+'%'+star+
+   '<br><span class="subtle">Misses - L-Left: '+missDir.longLeft+' | L-Right: '+missDir.longRight+' | S-Left: '+missDir.shortLeft+' | S-Right: '+missDir.shortRight+' | Best streak: '+(s.bestStreaks?.[d]||0)+'</span>'
 
    acc.appendChild(row)
   })
@@ -502,7 +596,7 @@ function initApp(){
  
  stats=loadStats()
  streaks=loadStreaks()
- bestStreaks=defaultBestStreaks()
+ bestStreaks=loadBestStreaks()
  sessions=loadSessions()
  buildDistanceRow()
  updateStats()
@@ -517,5 +611,6 @@ if(document.readyState==='loading'){
 
 </script>
 
-</body>
-</html>
+
+
+</body></html>
