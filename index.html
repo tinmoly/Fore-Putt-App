@@ -83,24 +83,24 @@ button:active{transform:translateY(3px) scale(.98);box-shadow:0 2px 0 rgba(0,0,0
 </div>
 
 <div class="stats">
-<p> Made: <span id="made">0</span> |  Missed: <span id="missed">0</span></p>
-<p>Make %: <span id="percent">0</span>%</p>
+<p>✅ Made: <span id="made">0</span> | ⛔ Missed: <span id="missed">0</span></p>
+<p>🚩 Make %: <span id="percent">0</span>%</p>
 <p><span id="streakLabel">Streak</span>: <span id="streak">0</span></p>
 </div>
 
 <div id="targetBadge" class="badge not-met"> Target: 15% PGA Tour Avg</div>
 
 <div style="display:flex;justify-content:space-between;gap:16px;margin-top:10px;width:100%;">
-<button onclick="newSession()" style="flex:1;background:#0096FF;color:#000;padding:6px 10px;font-size:20px;font-weight:800;border:none;border-radius:12px;box-shadow:0 6px 0 #0074c7,0 14px 22px rgba(0,0,0,.45);cursor:pointer;"> New Session</button>
-<button onclick="undoPutt()" style="flex:1;background:#8a8a8a;color:#000;padding:6px 10px;font-size:20px;font-weight:800;border:none;border-radius:12px;box-shadow:0 6px 0 #666,0 14px 22px rgba(0,0,0,.45);cursor:pointer;"> Undo Last Putt</button>
+<button onclick="newSession()" style="flex:1;background:#0096FF;color:#000;padding:6px 10px;font-size:20px;font-weight:800;border:none;border-radius:12px;box-shadow:0 6px 0 #0074c7,0 14px 22px rgba(0,0,0,.45);cursor:pointer;">🔄️ New Session</button>
+<button onclick="undoPutt()" style="flex:1;background:#8a8a8a;color:#000;padding:6px 10px;font-size:20px;font-weight:800;border:none;border-radius:12px;box-shadow:0 6px 0 #666,0 14px 22px rgba(0,0,0,.45);cursor:pointer;">↩️ Undo Last Putt</button>
 </div>
 
 <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
-<h3 style="margin:0"> Session History</h3>
+<h3 style="margin:0">📜 Session History</h3>
 <select id="historyAction" onchange="handleHistoryAction()" style="background:#1c7c5b;color:#fff;border:none;border-radius:8px;padding:6px 8px;font-weight:700">
 <option value="">Actions</option>
-<option value="export"> Export All History</option>
-<option value="delete"> Clear All History</option>
+<option value="export">📤 Export All History</option>
+<option value="delete">📵 Clear All History</option>
 </select>
 </div>
 
@@ -111,7 +111,7 @@ button:active{transform:translateY(3px) scale(.98);box-shadow:0 2px 0 rgba(0,0,0
 <script>
 
 const DISTANCES=[2,3,4,5,6,7,8,9,10,12,15,18,20,25,30]
-const PGA_TOUR_BASE_AVG={2:99,3:96,4:88,5:77,6:66,7:58,8:50,9:45,10:40,15:23,20:15,30:7}
+const PGA_TOUR_BASE_AVG={2:99,3:96,4:88,5:77,6:66,7:58,8:50,9:45,10:40,12:33,15:23,18:18,20:15,25:11,30:7}
 const PGA_TOUR_AVG=buildPgaTourAverage()
 
 let currentDistance=2
@@ -134,7 +134,7 @@ function withTapLock(fn){if(tapLocked)return;tapLocked=true;fn();setTimeout(()=>
 function flash(cls){document.body.classList.add(cls);setTimeout(()=>document.body.classList.remove(cls),150)}
 function haptic(ms){if(navigator.vibrate)navigator.vibrate(ms)}
 
-function getStreakEmojis(v){if(v>=10)return"*****";if(v>=7)return"****";if(v>=5)return"***";if(v>=3)return"**";if(v>=1)return"*";return""}
+function getStreakEmojis(v){if(v>=10)return"🔥🔥🔥🔥🔥";if(v>=7)return"🔥🔥🔥🔥";if(v>=5)return"🔥🔥🔥";if(v>=3)return"🔥🔥";if(v>=1)return"🔥";return""}
 
 function buildPgaTourAverage(){
  const projected={...PGA_TOUR_BASE_AVG}
@@ -283,7 +283,7 @@ function updateStats(){
  const target=PGA_TOUR_AVG[currentDistance]
  const badge=$("targetBadge")
  badge.className="badge "+(pct>=target?"met":"not-met")
- badge.innerHTML=pct>=target?" Better than PGA Tour Avg!<br> Target: "+target+"%":" Target: "+target+"% PGA Tour Avg"
+ badge.innerHTML=pct>=target?"🏆 Better than PGA Tour Avg!<br> Target: "+target+"%":"🎯 Target: "+target+"% PGA Tour Avg"
 }
 
 function recordMade(){
@@ -564,7 +564,7 @@ function renderHistory(){
   })
 
   const del=document.createElement("button")
-  del.textContent=" Delete Session"
+  del.textContent="🗑️ Delete Session"
   del.style.background="#E34234"
   del.style.padding="6px 10px"
   del.style.width="100%"
