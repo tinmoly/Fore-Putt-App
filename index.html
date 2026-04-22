@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0056)file:///G:/My%20Drive/Golf/Fore!Putt%20App/index_v7.html -->
+<!-- saved from url=(0058)file:///G:/My%20Drive/Golf/Fore!Putt%20App/index_v7.1.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -92,13 +92,13 @@ button:active{transform:translateY(3px) scale(.98);box-shadow:0 2px 0 rgba(0,0,0
 </div>
 
 <div class="stats">
-<p>✅ Made: <span id="made">0</span> | ⛔ Missed: <span id="missed">0</span></p>
-<p>🚩 Make %: <span id="percent">0</span>%</p>
-<p><span id="streakLabel">Random Streak</span>: <span id="streak">0</span></p>
-<p id="bestStreakRow" style="display: block;">Best Streak: <span id="bestStreak">0</span></p>
+<p>✅ Made: <span id="made">25</span> | ⛔ Missed: <span id="missed">2</span></p>
+<p>🚩 Make %: <span id="percent">93</span>%</p>
+<p><span id="streakLabel">Flaming Streak</span>: <span id="streak">10</span> <span id="streakReward">🔥🔥🔥🔥🔥</span></p>
+<p id="bestStreakRow" style="display: block;">Best Streak: <span id="bestStreak">10</span></p>
 </div>
 
-<div id="targetBadge" class="badge random random-target">🎯 Current Target: 5 feet<span class="random-total">⛳ Total Random Putts: 0</span></div>
+<div id="targetBadge" class="badge random random-target">🎯 Current Target: 5 feet<span class="random-total">⛳ Total Random Putts: 27</span></div>
 
 <div style="display:flex;justify-content:space-between;gap:16px;margin-top:10px;width:100%;">
 <button onclick="newSession()" style="flex:1;background:#0096FF;color:#000;padding:6px 10px;font-size:20px;font-weight:800;border:none;border-radius:12px;box-shadow:0 6px 0 #0074c7,0 14px 22px rgba(0,0,0,.45);cursor:pointer;">🔄️ New Session</button>
@@ -112,6 +112,10 @@ button:active{transform:translateY(3px) scale(.98);box-shadow:0 2px 0 rgba(0,0,0
 <option value="export">📤 Export All History</option>
 <option value="delete">📵 Clear All History</option>
 </select>
+</div>
+
+<div id="history"><p style="opacity:.8">No sessions yet.</p></div>
+
 </div>
 
 <script>
@@ -152,6 +156,18 @@ function flash(cls){document.body.classList.add(cls);setTimeout(()=>document.bod
 function haptic(ms){if(navigator.vibrate)navigator.vibrate(ms)}
 
 function getStreakEmojis(v){if(v>=10)return"Flaming Streak";if(v>=7)return"Hot Streak";if(v>=5)return"Strong Streak";if(v>=3)return"Building Streak";if(v>=1)return"Streak";return"Streak"}
+function getStreakReward(v){
+ let fireCount=0
+ if(v>=10)fireCount=5
+ else if(v>=7)fireCount=4
+ else if(v>=5)fireCount=3
+ else if(v>=3)fireCount=2
+ else if(v>=1)fireCount=1
+
+ let fires=""
+ for(let i=0;i<fireCount;i++)fires+="🔥"
+ return fires
+}
 
 function buildPgaTourAverage(){
  const projected={...PGA_TOUR_BASE_AVG}
@@ -432,12 +448,13 @@ function updateStats(){
   const pct=total?Math.round(made/total*100):0
   const streakValue=streaks[currentDistance]||0
 
-  $("made").textContent=made
-  $("missed").textContent=missed
-  $("percent").textContent=pct
-  $("streak").textContent=streakValue
-  $("streakLabel").textContent=getStreakEmojis(streakValue)
-  bestRow.style.display="none"
+ $("made").textContent=made
+ $("missed").textContent=missed
+ $("percent").textContent=pct
+ $("streak").textContent=streakValue
+ $("streakLabel").textContent=getStreakEmojis(streakValue)
+ $("streakReward").textContent=getStreakReward(streakValue)
+ bestRow.style.display="none"
 
   const target=PGA_TOUR_AVG[currentDistance]
   badge.className="badge manual-target "+(pct>=target?"met":"not-met")
@@ -456,7 +473,8 @@ function updateStats(){
  $("missed").textContent=missed
  $("percent").textContent=pct
  $("streak").textContent=randomState.summary.streak
- $("streakLabel").textContent="Random Streak"
+ $("streakLabel").textContent=getStreakEmojis(randomState.summary.streak)
+ $("streakReward").textContent=getStreakReward(randomState.summary.streak)
  $("bestStreak").textContent=randomState.summary.bestStreak
  bestRow.style.display="block"
 
@@ -830,8 +848,7 @@ function initApp(){
  manualCurrentDistance=DISTANCES[0]
  randomCurrentDistance=randomState.currentDistance
 
- buildDistanceRow()
- updateStats()
+ setMode("manual")
  renderHistory()
 }
 
@@ -842,6 +859,7 @@ if(document.readyState==="loading"){
 }
 
 </script>
+
 
 
 
