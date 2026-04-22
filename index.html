@@ -98,7 +98,7 @@ button:active{transform:translateY(3px) scale(.98);box-shadow:0 2px 0 rgba(0,0,0
 <p id="bestStreakRow" style="display: block;">Best Streak: <span id="bestStreak">10</span></p>
 </div>
 
-<div id="targetBadge" class="badge random random-target">🎯 Current Target: 5 feet<span class="random-total">⛳ Total Random Putts: 27</span></div>
+<div id="targetBadge" class="badge random random-target">🎯 Random Target: 5 feet<span class="random-total">⛳ Total Random Putts: 27</span></div>
 
 <div style="display:flex;justify-content:space-between;gap:16px;margin-top:10px;width:100%;">
 <button onclick="newSession()" style="flex:1;background:#0096FF;color:#000;padding:6px 10px;font-size:20px;font-weight:800;border:none;border-radius:12px;box-shadow:0 6px 0 #0074c7,0 14px 22px rgba(0,0,0,.45);cursor:pointer;">🔄️ New Session</button>
@@ -479,7 +479,7 @@ function updateStats(){
  bestRow.style.display="block"
 
  badge.className="badge random random-target"
- badge.innerHTML='🎯 Current Target: '+currentDistance+' feet<span class="random-total">⛳ Total Random Putts: '+total+'</span>'
+ badge.innerHTML='🎯 Random Target: '+currentDistance+' feet<span class="random-total">⛳ Total Random Putts: '+total+'</span>'
 }
 
 function selectNextRandomDistance(){
