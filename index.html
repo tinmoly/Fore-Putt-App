@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0058)file:///G:/My%20Drive/Golf/Fore!Putt%20App/index_v7.1.html -->
+<!-- saved from url=(0058)file:///G:/My%20Drive/Golf/Fore!Putt%20App/index_v7.2.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -74,8 +74,8 @@ button:active{transform:translateY(3px) scale(.98);box-shadow:0 2px 0 rgba(0,0,0
 <button id="modeToggleBtn" class="mode-btn random-on" onclick="toggleMode()">Random Mode On</button>
 </div>
 
-<div id="distanceRow" class="distance-row"><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">2'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">3'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">4'</button><button class="distance-btn random active" disabled="" title="Random Mode selects the next distance automatically.">5'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">6'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">7'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">8'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">9'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">10'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">12'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">15'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">18'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">20'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">25'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">30'</button></div>
-<h1 id="distanceTitle">5-Foot Putts</h1>
+<div id="distanceRow" class="distance-row"><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">2'</button><button class="distance-btn random active" disabled="" title="Random Mode selects the next distance automatically.">3'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">4'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">5'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">6'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">7'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">8'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">9'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">10'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">12'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">15'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">18'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">20'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">25'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">30'</button></div>
+<h1 id="distanceTitle">3-Foot Putts</h1>
 
 <div style="display:flex;flex-direction:column;align-items:center;">
 
@@ -92,13 +92,13 @@ button:active{transform:translateY(3px) scale(.98);box-shadow:0 2px 0 rgba(0,0,0
 </div>
 
 <div class="stats">
-<p>✅ Made: <span id="made">25</span> | ⛔ Missed: <span id="missed">2</span></p>
-<p>🚩 Make %: <span id="percent">93</span>%</p>
-<p><span id="streakLabel">Flaming Streak</span>: <span id="streak">10</span> <span id="streakReward">🔥🔥🔥🔥🔥</span></p>
-<p id="bestStreakRow" style="display: block;">Best Streak: <span id="bestStreak">10</span></p>
+<p>✅ Made: <span id="made">0</span> | ⛔ Missed: <span id="missed">0</span></p>
+<p>🚩 Make %: <span id="percent">0</span>%</p>
+<p><span id="streakLabel">Streak</span>: <span id="streak">0</span> <span id="streakReward"></span></p>
+<p id="bestStreakRow" style="display: block;">Best Streak: <span id="bestStreak">0</span></p>
 </div>
 
-<div id="targetBadge" class="badge random random-target">🎯 Random Target: 5 feet<span class="random-total">⛳ Total Random Putts: 27</span></div>
+<div id="targetBadge" class="badge random random-target">🎯 Current Target: 3 feet<span class="random-total">⛳ Total Random Putts: 0</span></div>
 
 <div style="display:flex;justify-content:space-between;gap:16px;margin-top:10px;width:100%;">
 <button onclick="newSession()" style="flex:1;background:#0096FF;color:#000;padding:6px 10px;font-size:20px;font-weight:800;border:none;border-radius:12px;box-shadow:0 6px 0 #0074c7,0 14px 22px rgba(0,0,0,.45);cursor:pointer;">🔄️ New Session</button>
@@ -114,7 +114,7 @@ button:active{transform:translateY(3px) scale(.98);box-shadow:0 2px 0 rgba(0,0,0
 </select>
 </div>
 
-<div id="history"><p style="opacity:.8">No sessions yet.</p></div>
+<div id="history"><div class="history-wrapper"><div class="history-card"><strong>Random Session 2</strong><br>4/29/2026 - 68% (22 putts)</div><div class="accordion"><div><strong>Random totals:</strong> 15/22 (68%)<br><span class="subtle">Best overall streak: 7</span></div><div><strong>3 ft:</strong> 0/2 (0%) - PGA 96%<br><span class="subtle">Misses - L-Left: 1 | L-Right: 1 | S-Left: 0 | S-Right: 0</span></div><div><strong>5 ft:</strong> 2/2 (100%) - PGA 77% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><div><strong>6 ft:</strong> 2/3 (67%) - PGA 66% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 1 | S-Right: 0</span></div><div><strong>7 ft:</strong> 1/1 (100%) - PGA 58% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><div><strong>8 ft:</strong> 2/2 (100%) - PGA 50% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><div><strong>9 ft:</strong> 2/2 (100%) - PGA 45% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><div><strong>12 ft:</strong> 0/1 (0%) - PGA 33%<br><span class="subtle">Misses - L-Left: 1 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><div><strong>15 ft:</strong> 2/2 (100%) - PGA 23% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><div><strong>18 ft:</strong> 0/1 (0%) - PGA 18%<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 1 | S-Right: 0</span></div><div><strong>20 ft:</strong> 2/4 (50%) - PGA 15% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 1 | S-Left: 0 | S-Right: 1</span></div><div><strong>25 ft:</strong> 2/2 (100%) - PGA 11% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><button style="background: rgb(227, 66, 52); padding: 6px 10px; width: 100%; font-size: 20px; font-weight: 800; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; border-radius: 12px; margin-top: 12px; box-shadow: rgb(176, 48, 38) 0px 6px 0px, rgba(0, 0, 0, 0.45) 0px 14px 22px;">🗑️ Delete Session</button></div></div><div class="history-wrapper"><div class="history-card"><strong>Manual Session 1</strong><br>4/29/2026 - 65% (26 putts)</div><div class="accordion"><div><strong>3 ft:</strong> 3/4 (75%) - PGA 96%<br><span class="subtle">Misses - L-Left: 1 | L-Right: 0 | S-Left: 0 | S-Right: 0 | Best streak: 3</span></div><div><strong>4 ft:</strong> 6/10 (60%) - PGA 88%<br><span class="subtle">Misses - L-Left: 1 | L-Right: 1 | S-Left: 1 | S-Right: 1 | Best streak: 5</span></div><div><strong>6 ft:</strong> 8/12 (67%) - PGA 66% ⭐<br><span class="subtle">Misses - L-Left: 1 | L-Right: 1 | S-Left: 1 | S-Right: 1 | Best streak: 4</span></div><button style="background: rgb(227, 66, 52); padding: 6px 10px; width: 100%; font-size: 20px; font-weight: 800; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; border-radius: 12px; margin-top: 12px; box-shadow: rgb(176, 48, 38) 0px 6px 0px, rgba(0, 0, 0, 0.45) 0px 14px 22px;">🗑️ Delete Session</button></div></div></div>
 
 </div>
 
@@ -126,6 +126,7 @@ const PGA_TOUR_AVG=buildPgaTourAverage()
 const MANUAL_STATS_KEY="puttingStats"
 const MANUAL_STREAKS_KEY="puttingStreaks"
 const MANUAL_BEST_STREAKS_KEY="puttingBestStreaks"
+const MANUAL_DISTANCE_KEY="puttingManualDistance"
 const RANDOM_STATE_KEY="puttingRandomState"
 const SESSIONS_KEY="puttingSessions"
 
@@ -286,6 +287,15 @@ function saveBestStreaks(){
  localStorage.setItem(MANUAL_BEST_STREAKS_KEY,JSON.stringify(bestStreaks))
 }
 
+function loadManualDistance(){
+ const saved=Number(localStorage.getItem(MANUAL_DISTANCE_KEY))
+ return DISTANCES.includes(saved)?saved:DISTANCES[0]
+}
+
+function saveManualDistance(){
+ localStorage.setItem(MANUAL_DISTANCE_KEY,String(manualCurrentDistance))
+}
+
 function loadRandomState(){
  try{
   const saved=JSON.parse(localStorage.getItem(RANDOM_STATE_KEY))||{}
@@ -328,6 +338,7 @@ function resetCurrentTracking(){
  saveStats()
  saveStreaks()
  saveBestStreaks()
+ saveManualDistance()
 }
 
 function resetRandomTracking(){
@@ -427,8 +438,7 @@ function toggleMode(){
 
 function setDistance(distance){
  manualCurrentDistance=distance
- streaks[distance]=0
- saveStreaks()
+ saveManualDistance()
  buildDistanceRow()
  updateStats()
 }
@@ -479,7 +489,7 @@ function updateStats(){
  bestRow.style.display="block"
 
  badge.className="badge random random-target"
- badge.innerHTML='🎯 Random Target: '+currentDistance+' feet<span class="random-total">⛳ Total Random Putts: '+total+'</span>'
+ badge.innerHTML='🎯 Current Target: '+currentDistance+' feet<span class="random-total">⛳ Total Random Putts: '+total+'</span>'
 }
 
 function selectNextRandomDistance(){
@@ -607,6 +617,10 @@ function newSession(){
 
  if(appMode==="manual"){
   const summary=summarizeManualSession()
+  if(!summary.total){
+   alert("No putts recorded yet.")
+   return
+  }
   sessions.push({
    mode:"manual",
    date:new Date().toISOString(),
@@ -624,6 +638,10 @@ function newSession(){
  }
 
  const summary=summarizeRandomSession()
+ if(!summary.total){
+  alert("No putts recorded yet.")
+  return
+ }
  sessions.push({
   mode:"random",
   date:new Date().toISOString(),
@@ -645,6 +663,7 @@ function undoPutt(){
 
   const last=manualPuttHistory.pop()
   manualCurrentDistance=last.distance
+  saveManualDistance()
   const stat=stats[manualCurrentDistance]
 
   if(last.type==="made" && stat.made>0){
@@ -751,6 +770,41 @@ function exportHistoryCSV(){
        (summary.total||0)+","+(summary.pct||0)+",,,"+streakValue+"\n\n"
  })
 
+  let grandTotals={made:0,missed:0,shortLeft:0,longRight:0,longLeft:0,shortRight:0}
+
+  sessions.forEach(session=>{
+   const summary=session.summary||{}
+   grandTotals.made+=(summary.made||0)
+   grandTotals.missed+=(summary.missed||0)
+
+   DISTANCES.forEach(distance=>{
+    const stat=session.stats?.[distance]
+    if(!stat)return
+    const missDir=stat.missDir||{}
+    grandTotals.shortLeft+=(missDir.shortLeft||0)
+    grandTotals.longRight+=(missDir.longRight||0)
+    grandTotals.longLeft+=(missDir.longLeft||0)
+    grandTotals.shortRight+=(missDir.shortRight||0)
+   })
+  })
+
+  const grandTotalPutts=grandTotals.made+grandTotals.missed
+  const grandMakePct=grandTotalPutts?Math.round(grandTotals.made/grandTotalPutts*100):0
+  const grandMissTotal=grandTotals.missed||0
+  const grandPctSL=grandMissTotal?Math.round(grandTotals.shortLeft/grandMissTotal*100):0
+  const grandPctLR=grandMissTotal?Math.round(grandTotals.longRight/grandMissTotal*100):0
+  const grandPctLL=grandMissTotal?Math.round(grandTotals.longLeft/grandMissTotal*100):0
+  const grandPctSR=grandMissTotal?Math.round(grandTotals.shortRight/grandMissTotal*100):0
+  const formatCount=(count,pct)=>count+" ("+pct+"%)"
+
+  csv+="GRAND TOTAL,ALL,,,ALL,"+
+       grandTotals.made+","+grandTotals.missed+","+
+       formatCount(grandTotals.shortLeft,grandPctSL)+","+
+       formatCount(grandTotals.longRight,grandPctLR)+","+
+       formatCount(grandTotals.longLeft,grandPctLL)+","+
+       formatCount(grandTotals.shortRight,grandPctSR)+","+
+       grandTotalPutts+","+grandMakePct+",,,\n"
+
  const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"})
  const anchor=document.createElement("a")
  anchor.href=URL.createObjectURL(blob)
@@ -845,7 +899,7 @@ function initApp(){
  randomState=loadRandomState()
  sessions=loadSessions()
 
- manualCurrentDistance=DISTANCES[0]
+ manualCurrentDistance=loadManualDistance()
  randomCurrentDistance=randomState.currentDistance
 
  setMode("manual")
@@ -859,6 +913,7 @@ if(document.readyState==="loading"){
 }
 
 </script>
+
 
 
 
