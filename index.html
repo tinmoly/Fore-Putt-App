@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<!-- saved from url=(0058)file:///G:/My%20Drive/Golf/Fore!Putt%20App/index_v7.2.html -->
+<!-- saved from url=(0058)file:///G:/My%20Drive/Golf/Fore!Putt%20App/index_v7.3.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fore!Putt Practice App - v7.3</title>
+<title>Fore!Putt Practice App - Version 7</title>
 
 <style>
 body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0b3d2e;color:#fff;margin:0;padding:20px}
@@ -71,11 +71,11 @@ button:active{transform:translateY(3px) scale(.98);box-shadow:0 2px 0 rgba(0,0,0
 <div class="card">
 
 <div class="mode-row">
-<button id="modeToggleBtn" class="mode-btn random-on" onclick="toggleMode()">Random Mode On</button>
+<button id="modeToggleBtn" class="mode-btn" onclick="toggleMode()">Manual Mode On</button>
 </div>
 
-<div id="distanceRow" class="distance-row"><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">2'</button><button class="distance-btn random active" disabled="" title="Random Mode selects the next distance automatically.">3'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">4'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">5'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">6'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">7'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">8'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">9'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">10'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">12'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">15'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">18'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">20'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">25'</button><button class="distance-btn random" disabled="" title="Random Mode selects the next distance automatically.">30'</button></div>
-<h1 id="distanceTitle">3-Foot Putts</h1>
+<div id="distanceRow" class="distance-row"><button class="distance-btn active">2'</button><button class="distance-btn">3'</button><button class="distance-btn">4'</button><button class="distance-btn">5'</button><button class="distance-btn">6'</button><button class="distance-btn">7'</button><button class="distance-btn">8'</button><button class="distance-btn">9'</button><button class="distance-btn">10'</button><button class="distance-btn">12'</button><button class="distance-btn">15'</button><button class="distance-btn">18'</button><button class="distance-btn">20'</button><button class="distance-btn">25'</button><button class="distance-btn">30'</button></div>
+<h1 id="distanceTitle">2-Foot Putts</h1>
 
 <div style="display:flex;flex-direction:column;align-items:center;">
 
@@ -95,10 +95,10 @@ button:active{transform:translateY(3px) scale(.98);box-shadow:0 2px 0 rgba(0,0,0
 <p>✅ Made: <span id="made">0</span> | ⛔ Missed: <span id="missed">0</span></p>
 <p>🚩 Make %: <span id="percent">0</span>%</p>
 <p><span id="streakLabel">Streak</span>: <span id="streak">0</span> <span id="streakReward"></span></p>
-<p id="bestStreakRow" style="display: block;">Best Streak: <span id="bestStreak">0</span></p>
+<p id="bestStreakRow" style="display: none;">Best Streak: <span id="bestStreak">0</span></p>
 </div>
 
-<div id="targetBadge" class="badge random random-target">🎯 Current Target: 3 feet<span class="random-total">⛳ Total Random Putts: 0</span></div>
+<div id="targetBadge" class="badge manual-target not-met">🎯 Target: 99% PGA Tour Avg<span class="manual-total">⛳ Total Putts: 0</span></div>
 
 <div style="display:flex;justify-content:space-between;gap:16px;margin-top:10px;width:100%;">
 <button onclick="newSession()" style="flex:1;background:#0096FF;color:#000;padding:6px 10px;font-size:20px;font-weight:800;border:none;border-radius:12px;box-shadow:0 6px 0 #0074c7,0 14px 22px rgba(0,0,0,.45);cursor:pointer;">🔄️ New Session</button>
@@ -114,7 +114,7 @@ button:active{transform:translateY(3px) scale(.98);box-shadow:0 2px 0 rgba(0,0,0
 </select>
 </div>
 
-<div id="history"><div class="history-wrapper"><div class="history-card"><strong>Random Session 2</strong><br>4/29/2026 - 68% (22 putts)</div><div class="accordion"><div><strong>Random totals:</strong> 15/22 (68%)<br><span class="subtle">Best overall streak: 7</span></div><div><strong>3 ft:</strong> 0/2 (0%) - PGA 96%<br><span class="subtle">Misses - L-Left: 1 | L-Right: 1 | S-Left: 0 | S-Right: 0</span></div><div><strong>5 ft:</strong> 2/2 (100%) - PGA 77% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><div><strong>6 ft:</strong> 2/3 (67%) - PGA 66% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 1 | S-Right: 0</span></div><div><strong>7 ft:</strong> 1/1 (100%) - PGA 58% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><div><strong>8 ft:</strong> 2/2 (100%) - PGA 50% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><div><strong>9 ft:</strong> 2/2 (100%) - PGA 45% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><div><strong>12 ft:</strong> 0/1 (0%) - PGA 33%<br><span class="subtle">Misses - L-Left: 1 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><div><strong>15 ft:</strong> 2/2 (100%) - PGA 23% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><div><strong>18 ft:</strong> 0/1 (0%) - PGA 18%<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 1 | S-Right: 0</span></div><div><strong>20 ft:</strong> 2/4 (50%) - PGA 15% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 1 | S-Left: 0 | S-Right: 1</span></div><div><strong>25 ft:</strong> 2/2 (100%) - PGA 11% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><button style="background: rgb(227, 66, 52); padding: 6px 10px; width: 100%; font-size: 20px; font-weight: 800; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; border-radius: 12px; margin-top: 12px; box-shadow: rgb(176, 48, 38) 0px 6px 0px, rgba(0, 0, 0, 0.45) 0px 14px 22px;">🗑️ Delete Session</button></div></div><div class="history-wrapper"><div class="history-card"><strong>Manual Session 1</strong><br>4/29/2026 - 65% (26 putts)</div><div class="accordion"><div><strong>3 ft:</strong> 3/4 (75%) - PGA 96%<br><span class="subtle">Misses - L-Left: 1 | L-Right: 0 | S-Left: 0 | S-Right: 0 | Best streak: 3</span></div><div><strong>4 ft:</strong> 6/10 (60%) - PGA 88%<br><span class="subtle">Misses - L-Left: 1 | L-Right: 1 | S-Left: 1 | S-Right: 1 | Best streak: 5</span></div><div><strong>6 ft:</strong> 8/12 (67%) - PGA 66% ⭐<br><span class="subtle">Misses - L-Left: 1 | L-Right: 1 | S-Left: 1 | S-Right: 1 | Best streak: 4</span></div><button style="background: rgb(227, 66, 52); padding: 6px 10px; width: 100%; font-size: 20px; font-weight: 800; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; border-radius: 12px; margin-top: 12px; box-shadow: rgb(176, 48, 38) 0px 6px 0px, rgba(0, 0, 0, 0.45) 0px 14px 22px;">🗑️ Delete Session</button></div></div></div>
+<div id="history"><div class="history-wrapper"><div class="history-card"><strong>Combined Session 2</strong><br>4/29/2026 - 67% (24 putts)</div><div class="accordion"><div><strong>Manual totals:</strong> 4/9 (44%)</div><div><strong>Random totals:</strong> 12/15 (80%)<br><span class="subtle">Best overall streak: 9</span></div><div><strong>2 ft:</strong> Random - 2/2 (100%) - PGA 99% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><div><strong>3 ft:</strong> Random - 2/2 (100%) - PGA 96% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><div><strong>5 ft:</strong> Random - 1/1 (100%) - PGA 77% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><div><strong>6 ft:</strong> Random - 0/1 (0%) - PGA 66%<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 1 | S-Right: 0</span></div><div><strong>8 ft:</strong> Manual - 3/6 (50%) - PGA 50% ⭐<br><span class="subtle">Misses - L-Left: 1 | L-Right: 1 | S-Left: 0 | S-Right: 1 | Best streak: 2</span><br><strong>8 ft:</strong> Random - 1/1 (100%) - PGA 50% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><div><strong>12 ft:</strong> Random - 1/3 (33%) - PGA 33% ⭐<br><span class="subtle">Misses - L-Left: 1 | L-Right: 0 | S-Left: 0 | S-Right: 1</span></div><div><strong>15 ft:</strong> Manual - 1/3 (33%) - PGA 23% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 1 | S-Left: 1 | S-Right: 0 | Best streak: 1</span></div><div><strong>18 ft:</strong> Random - 1/1 (100%) - PGA 18% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><div><strong>20 ft:</strong> Random - 1/1 (100%) - PGA 15% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><div><strong>25 ft:</strong> Random - 2/2 (100%) - PGA 11% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><div><strong>30 ft:</strong> Random - 1/1 (100%) - PGA 7% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><button style="background: rgb(227, 66, 52); padding: 6px 10px; width: 100%; font-size: 20px; font-weight: 800; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; border-radius: 12px; margin-top: 12px; box-shadow: rgb(176, 48, 38) 0px 6px 0px, rgba(0, 0, 0, 0.45) 0px 14px 22px;">🗑️ Delete Session</button></div></div><div class="history-wrapper"><div class="history-card"><strong>Combined Session 1</strong><br>4/29/2026 - 69% (52 putts)</div><div class="accordion"><div><strong>Manual totals:</strong> 18/28 (64%)</div><div><strong>Random totals:</strong> 18/24 (75%)<br><span class="subtle">Best overall streak: 10</span></div><div><strong>2 ft:</strong> Random - 1/1 (100%) - PGA 99% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><div><strong>3 ft:</strong> Manual - 9/13 (69%) - PGA 96%<br><span class="subtle">Misses - L-Left: 1 | L-Right: 2 | S-Left: 1 | S-Right: 0 | Best streak: 7</span><br><strong>3 ft:</strong> Random - 1/2 (50%) - PGA 96%<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 1 | S-Right: 0</span></div><div><strong>5 ft:</strong> Manual - 2/2 (100%) - PGA 77% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0 | Best streak: 2</span><br><strong>5 ft:</strong> Random - 1/1 (100%) - PGA 77% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><div><strong>6 ft:</strong> Manual - 5/9 (56%) - PGA 66%<br><span class="subtle">Misses - L-Left: 1 | L-Right: 1 | S-Left: 1 | S-Right: 1 | Best streak: 3</span><br><strong>6 ft:</strong> Random - 1/1 (100%) - PGA 66% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><div><strong>7 ft:</strong> Random - 3/4 (75%) - PGA 58% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 1 | S-Right: 0</span></div><div><strong>8 ft:</strong> Manual - 2/4 (50%) - PGA 50% ⭐<br><span class="subtle">Misses - L-Left: 1 | L-Right: 1 | S-Left: 0 | S-Right: 0 | Best streak: 1</span><br><strong>8 ft:</strong> Random - 2/3 (67%) - PGA 50% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 1</span></div><div><strong>9 ft:</strong> Random - 3/3 (100%) - PGA 45% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><div><strong>12 ft:</strong> Random - 1/2 (50%) - PGA 33% ⭐<br><span class="subtle">Misses - L-Left: 1 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><div><strong>15 ft:</strong> Random - 1/2 (50%) - PGA 23% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 1 | S-Left: 0 | S-Right: 0</span></div><div><strong>18 ft:</strong> Random - 2/2 (100%) - PGA 18% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><div><strong>25 ft:</strong> Random - 1/2 (50%) - PGA 11% ⭐<br><span class="subtle">Misses - L-Left: 1 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><div><strong>30 ft:</strong> Random - 1/1 (100%) - PGA 7% ⭐<br><span class="subtle">Misses - L-Left: 0 | L-Right: 0 | S-Left: 0 | S-Right: 0</span></div><button style="background: rgb(227, 66, 52); padding: 6px 10px; width: 100%; font-size: 20px; font-weight: 800; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; border-radius: 12px; margin-top: 12px; box-shadow: rgb(176, 48, 38) 0px 6px 0px, rgba(0, 0, 0, 0.45) 0px 14px 22px;">🗑️ Delete Session</button></div></div></div>
 
 </div>
 
@@ -127,6 +127,7 @@ const MANUAL_STATS_KEY="puttingStats"
 const MANUAL_STREAKS_KEY="puttingStreaks"
 const MANUAL_BEST_STREAKS_KEY="puttingBestStreaks"
 const MANUAL_DISTANCE_KEY="puttingManualDistance"
+const APP_MODE_KEY="puttingAppMode"
 const RANDOM_STATE_KEY="puttingRandomState"
 const SESSIONS_KEY="puttingSessions"
 
@@ -296,6 +297,15 @@ function saveManualDistance(){
  localStorage.setItem(MANUAL_DISTANCE_KEY,String(manualCurrentDistance))
 }
 
+function loadAppMode(){
+ const saved=localStorage.getItem(APP_MODE_KEY)
+ return saved==="random"?"random":"manual"
+}
+
+function saveAppMode(){
+ localStorage.setItem(APP_MODE_KEY,appMode)
+}
+
 function loadRandomState(){
  try{
   const saved=JSON.parse(localStorage.getItem(RANDOM_STATE_KEY))||{}
@@ -326,6 +336,72 @@ function loadSessions(){
 
 function saveSessions(){
  localStorage.setItem(SESSIONS_KEY,JSON.stringify(sessions))
+}
+
+function isCombinedSession(session){
+ return !!session && typeof session==="object" && !!session.manual && !!session.random
+}
+
+function createCombinedSummary(manualSummary,randomSummary){
+ const made=(manualSummary?.made||0)+(randomSummary?.made||0)
+ const missed=(manualSummary?.missed||0)+(randomSummary?.missed||0)
+ const total=made+missed
+ return {
+  made,
+  missed,
+  total,
+  pct:total?Math.round(made/total*100):0
+ }
+}
+
+function getSessionDisplaySummary(session){
+ if(isCombinedSession(session)){
+  return session.summary||createCombinedSummary(session.manual?.summary,session.random?.summary)
+ }
+ return session.summary||{made:0,missed:0,total:0,pct:0}
+}
+
+function getSessionModeLabel(session){
+ if(isCombinedSession(session))return "Combined"
+ return (session.mode||"manual")==="random"?"Random":"Manual"
+}
+
+function getSessionManualData(session){
+ if(isCombinedSession(session))return session.manual||null
+ if((session.mode||"manual")==="manual"){
+  return {
+   stats:session.stats||defaultStats(),
+   bestStreaks:session.bestStreaks||defaultBestStreaks(),
+   summary:session.summary||{made:0,missed:0,total:0,pct:0}
+  }
+ }
+ return null
+}
+
+function getSessionRandomData(session){
+ if(isCombinedSession(session))return session.random||null
+ if((session.mode||"manual")==="random"){
+  return {
+   stats:session.stats||defaultStats(),
+   bestStreaks:session.bestStreaks||{all:0},
+   summary:session.summary||{made:0,missed:0,total:0,pct:0,bestStreak:0}
+  }
+ }
+ return null
+}
+
+function summarizeMissTotals(statsMap){
+ const missTotals={shortLeft:0,longRight:0,longLeft:0,shortRight:0}
+ DISTANCES.forEach(distance=>{
+  const stat=statsMap?.[distance]
+  if(!stat)return
+  const missDir=stat.missDir||{}
+  missTotals.shortLeft+=(missDir.shortLeft||0)
+  missTotals.longRight+=(missDir.longRight||0)
+  missTotals.longLeft+=(missDir.longLeft||0)
+  missTotals.shortRight+=(missDir.shortRight||0)
+ })
+ return missTotals
 }
 
 function resetCurrentTracking(){
@@ -423,7 +499,13 @@ function buildDistanceRow(){
 }
 
 function setMode(mode){
+ if(appMode==="random" && mode==="manual"){
+  manualCurrentDistance=randomCurrentDistance
+  saveManualDistance()
+ }
+
  appMode=mode
+ saveAppMode()
  const modeToggleBtn=$("modeToggleBtn")
  modeToggleBtn.textContent=appMode==="manual"?"Manual Mode On":"Random Mode On"
  modeToggleBtn.classList.toggle("random-on",appMode==="random")
@@ -615,42 +697,31 @@ function summarizeRandomSession(){
 function newSession(){
  if(!confirm("Start a new session?"))return
 
- if(appMode==="manual"){
-  const summary=summarizeManualSession()
-  if(!summary.total){
-   alert("No putts recorded yet.")
-   return
-  }
-  sessions.push({
-   mode:"manual",
-   date:new Date().toISOString(),
-   stats:deepCopy(stats),
-   bestStreaks:deepCopy(bestStreaks),
-   summary
-  })
-
-  saveSessions()
-  resetCurrentTracking()
-  buildDistanceRow()
-  updateStats()
-  renderHistory()
-  return
- }
-
- const summary=summarizeRandomSession()
- if(!summary.total){
+ const manualSummary=summarizeManualSession()
+ const randomSummary=summarizeRandomSession()
+ if(!manualSummary.total && !randomSummary.total){
   alert("No putts recorded yet.")
   return
  }
+
  sessions.push({
-  mode:"random",
+  mode:"combined",
   date:new Date().toISOString(),
-  stats:deepCopy(randomState.stats),
-  bestStreaks:{all:randomState.summary.bestStreak},
-  summary
+  manual:{
+   stats:deepCopy(stats),
+   bestStreaks:deepCopy(bestStreaks),
+   summary:manualSummary
+  },
+  random:{
+   stats:deepCopy(randomState.stats),
+   bestStreaks:{all:randomState.summary.bestStreak},
+   summary:randomSummary
+  },
+  summary:createCombinedSummary(manualSummary,randomSummary)
  })
 
  saveSessions()
+ resetCurrentTracking()
  resetRandomTracking()
  buildDistanceRow()
  updateStats()
@@ -714,78 +785,121 @@ function handleHistoryAction(){
 function exportHistoryCSV(){
  if(!sessions.length){alert("No session history to export.");return}
 
- let csv="Session,Mode,Date,Time,Distance,Made,Missed,Short Left,Long Right,Long Left,Short Right,Total,Make%,PGA Tour Avg %,Delta vs PGA,Streak\n"
+ let csv="Session,Mode,Date,Time,Distance,Practice Mode,Made,Missed,Short Left,Long Right,Long Left,Short Right,Total,Make%,PGA Tour Avg %,Delta vs PGA,Streak\n"
 
  sessions.forEach((session,index)=>{
   const date=new Date(session.date)
   const dateStr=date.toLocaleDateString()
   const timeStr=date.toLocaleTimeString()
-  const mode=(session.mode||"manual").toUpperCase()
+  const mode=isCombinedSession(session)?"COMBINED":(session.mode||"manual").toUpperCase()
+  const manualData=getSessionManualData(session)
+  const randomData=getSessionRandomData(session)
 
   DISTANCES.forEach(distance=>{
-   const stat=session.stats?.[distance]
-   if(!stat)return
+   const rows=[]
+   if(manualData)rows.push({practiceMode:"MANUAL",stat:manualData.stats?.[distance],streakValue:manualData.bestStreaks?.[distance]||0})
+   if(randomData)rows.push({practiceMode:"RANDOM",stat:randomData.stats?.[distance],streakValue:""})
 
-   const missDir=stat.missDir||{shortLeft:0,longRight:0,longLeft:0,shortRight:0}
-   const total=(stat.made||0)+(stat.missed||0)
-   if(!total)return
+   rows.forEach(row=>{
+    const stat=row.stat
+    if(!stat)return
 
-   const makePct=Math.round((stat.made||0)/total*100)
-   const pga=PGA_TOUR_AVG[distance]
-   const delta=makePct-pga
-   const streakValue=session.mode==="random"?"":(session.bestStreaks?.[distance]||0)
+    const missDir=stat.missDir||{shortLeft:0,longRight:0,longLeft:0,shortRight:0}
+    const total=(stat.made||0)+(stat.missed||0)
+    if(!total)return
 
-   csv+=(index+1)+","+mode+","+dateStr+","+timeStr+","+distance+","+
-        (stat.made||0)+","+(stat.missed||0)+","+
-        missDir.shortLeft+","+missDir.longRight+","+missDir.longLeft+","+missDir.shortRight+","+
-        total+","+makePct+","+pga+","+delta+","+streakValue+"\n"
+    const makePct=Math.round((stat.made||0)/total*100)
+    const pga=PGA_TOUR_AVG[distance]
+    const delta=makePct-pga
+
+    csv+=(index+1)+","+mode+","+dateStr+","+timeStr+","+distance+","+row.practiceMode+","+
+         (stat.made||0)+","+(stat.missed||0)+","+
+         missDir.shortLeft+","+missDir.longRight+","+missDir.longLeft+","+missDir.shortRight+","+
+         total+","+makePct+","+pga+","+delta+","+row.streakValue+"\n"
+   })
   })
 
-  let missTotals={shortLeft:0,longRight:0,longLeft:0,shortRight:0}
-  DISTANCES.forEach(distance=>{
-   const stat=session.stats?.[distance]
-   if(!stat)return
-   const missDir=stat.missDir||{}
-   missTotals.shortLeft+=(missDir.shortLeft||0)
-   missTotals.longRight+=(missDir.longRight||0)
-   missTotals.longLeft+=(missDir.longLeft||0)
-   missTotals.shortRight+=(missDir.shortRight||0)
-  })
+  const manualMissTotals=manualData?summarizeMissTotals(manualData.stats):{shortLeft:0,longRight:0,longLeft:0,shortRight:0}
+  const randomMissTotals=randomData?summarizeMissTotals(randomData.stats):{shortLeft:0,longRight:0,longLeft:0,shortRight:0}
+  const combinedMissTotals={
+   shortLeft:manualMissTotals.shortLeft+randomMissTotals.shortLeft,
+   longRight:manualMissTotals.longRight+randomMissTotals.longRight,
+   longLeft:manualMissTotals.longLeft+randomMissTotals.longLeft,
+   shortRight:manualMissTotals.shortRight+randomMissTotals.shortRight
+  }
 
-  const summary=session.summary||{}
-  const totalMiss=summary.missed||0
-  const pctSL=totalMiss?Math.round(missTotals.shortLeft/totalMiss*100):0
-  const pctLR=totalMiss?Math.round(missTotals.longRight/totalMiss*100):0
-  const pctLL=totalMiss?Math.round(missTotals.longLeft/totalMiss*100):0
-  const pctSR=totalMiss?Math.round(missTotals.shortRight/totalMiss*100):0
   const formatCount=(count,pct)=>count+" ("+pct+"%)"
-  const streakValue=session.mode==="random"?(summary.bestStreak||session.bestStreaks?.all||0):""
 
-  csv+=(index+1)+","+mode+","+dateStr+","+timeStr+",ALL,"+
-       (summary.made||0)+","+(summary.missed||0)+","+
-       formatCount(missTotals.shortLeft,pctSL)+","+
-       formatCount(missTotals.longRight,pctLR)+","+
-       formatCount(missTotals.longLeft,pctLL)+","+
-       formatCount(missTotals.shortRight,pctSR)+","+
-       (summary.total||0)+","+(summary.pct||0)+",,,"+streakValue+"\n\n"
+  if(manualData && manualData.summary?.total){
+   const totalMiss=manualData.summary.missed||0
+   const pctSL=totalMiss?Math.round(manualMissTotals.shortLeft/totalMiss*100):0
+   const pctLR=totalMiss?Math.round(manualMissTotals.longRight/totalMiss*100):0
+   const pctLL=totalMiss?Math.round(manualMissTotals.longLeft/totalMiss*100):0
+   const pctSR=totalMiss?Math.round(manualMissTotals.shortRight/totalMiss*100):0
+
+   csv+=(index+1)+","+mode+","+dateStr+","+timeStr+",ALL,MANUAL,"+
+        (manualData.summary.made||0)+","+(manualData.summary.missed||0)+","+
+        formatCount(manualMissTotals.shortLeft,pctSL)+","+
+        formatCount(manualMissTotals.longRight,pctLR)+","+
+        formatCount(manualMissTotals.longLeft,pctLL)+","+
+        formatCount(manualMissTotals.shortRight,pctSR)+","+
+        (manualData.summary.total||0)+","+(manualData.summary.pct||0)+",,,"+"\n"
+  }
+
+  if(randomData && randomData.summary?.total){
+   const totalMiss=randomData.summary.missed||0
+   const pctSL=totalMiss?Math.round(randomMissTotals.shortLeft/totalMiss*100):0
+   const pctLR=totalMiss?Math.round(randomMissTotals.longRight/totalMiss*100):0
+   const pctLL=totalMiss?Math.round(randomMissTotals.longLeft/totalMiss*100):0
+   const pctSR=totalMiss?Math.round(randomMissTotals.shortRight/totalMiss*100):0
+   const streakValue=randomData.summary.bestStreak||randomData.bestStreaks?.all||0
+
+   csv+=(index+1)+","+mode+","+dateStr+","+timeStr+",ALL,RANDOM,"+
+        (randomData.summary.made||0)+","+(randomData.summary.missed||0)+","+
+        formatCount(randomMissTotals.shortLeft,pctSL)+","+
+        formatCount(randomMissTotals.longRight,pctLR)+","+
+        formatCount(randomMissTotals.longLeft,pctLL)+","+
+        formatCount(randomMissTotals.shortRight,pctSR)+","+
+        (randomData.summary.total||0)+","+(randomData.summary.pct||0)+",,,"+streakValue+"\n"
+  }
+
+  const combinedSummary=getSessionDisplaySummary(session)
+  if(combinedSummary.total){
+   const totalMiss=combinedSummary.missed||0
+   const pctSL=totalMiss?Math.round(combinedMissTotals.shortLeft/totalMiss*100):0
+   const pctLR=totalMiss?Math.round(combinedMissTotals.longRight/totalMiss*100):0
+   const pctLL=totalMiss?Math.round(combinedMissTotals.longLeft/totalMiss*100):0
+   const pctSR=totalMiss?Math.round(combinedMissTotals.shortRight/totalMiss*100):0
+
+   csv+=(index+1)+","+mode+","+dateStr+","+timeStr+",ALL,COMBINED,"+
+        (combinedSummary.made||0)+","+(combinedSummary.missed||0)+","+
+        formatCount(combinedMissTotals.shortLeft,pctSL)+","+
+        formatCount(combinedMissTotals.longRight,pctLR)+","+
+        formatCount(combinedMissTotals.longLeft,pctLL)+","+
+        formatCount(combinedMissTotals.shortRight,pctSR)+","+
+        (combinedSummary.total||0)+","+(combinedSummary.pct||0)+",,,"+"\n\n"
+  }
  })
 
   let grandTotals={made:0,missed:0,shortLeft:0,longRight:0,longLeft:0,shortRight:0}
 
   sessions.forEach(session=>{
-   const summary=session.summary||{}
+   const summary=getSessionDisplaySummary(session)
    grandTotals.made+=(summary.made||0)
    grandTotals.missed+=(summary.missed||0)
 
-   DISTANCES.forEach(distance=>{
-    const stat=session.stats?.[distance]
-    if(!stat)return
-    const missDir=stat.missDir||{}
-    grandTotals.shortLeft+=(missDir.shortLeft||0)
-    grandTotals.longRight+=(missDir.longRight||0)
-    grandTotals.longLeft+=(missDir.longLeft||0)
-    grandTotals.shortRight+=(missDir.shortRight||0)
-   })
+   const manualData=getSessionManualData(session)
+   const randomData=getSessionRandomData(session)
+   const combinedMissTotals={
+    shortLeft:(manualData?summarizeMissTotals(manualData.stats).shortLeft:0)+(randomData?summarizeMissTotals(randomData.stats).shortLeft:0),
+    longRight:(manualData?summarizeMissTotals(manualData.stats).longRight:0)+(randomData?summarizeMissTotals(randomData.stats).longRight:0),
+    longLeft:(manualData?summarizeMissTotals(manualData.stats).longLeft:0)+(randomData?summarizeMissTotals(randomData.stats).longLeft:0),
+    shortRight:(manualData?summarizeMissTotals(manualData.stats).shortRight:0)+(randomData?summarizeMissTotals(randomData.stats).shortRight:0)
+   }
+   grandTotals.shortLeft+=combinedMissTotals.shortLeft
+   grandTotals.longRight+=combinedMissTotals.longRight
+   grandTotals.longLeft+=combinedMissTotals.longLeft
+   grandTotals.shortRight+=combinedMissTotals.shortRight
   })
 
   const grandTotalPutts=grandTotals.made+grandTotals.missed
@@ -797,7 +911,7 @@ function exportHistoryCSV(){
   const grandPctSR=grandMissTotal?Math.round(grandTotals.shortRight/grandMissTotal*100):0
   const formatCount=(count,pct)=>count+" ("+pct+"%)"
 
-  csv+="GRAND TOTAL,ALL,,,ALL,"+
+  csv+="GRAND TOTAL,ALL,,,ALL,COMBINED,"+
        grandTotals.made+","+grandTotals.missed+","+
        formatCount(grandTotals.shortLeft,grandPctSL)+","+
        formatCount(grandTotals.longRight,grandPctLR)+","+
@@ -821,10 +935,12 @@ function renderHistory(){
   return
  }
 
- sessions.slice().reverse().forEach((session,reverseIndex)=>{
+  sessions.slice().reverse().forEach((session,reverseIndex)=>{
   const index=sessions.length-1-reverseIndex
-  const mode=(session.mode||"manual")
-  const modeLabel=mode==="random"?"Random":"Manual"
+  const modeLabel=getSessionModeLabel(session)
+  const summary=getSessionDisplaySummary(session)
+  const manualData=getSessionManualData(session)
+  const randomData=getSessionRandomData(session)
 
   const wrapper=document.createElement("div")
   wrapper.className="history-wrapper"
@@ -836,32 +952,51 @@ function renderHistory(){
   accordion.className="accordion"
 
   const date=new Date(session.date)
-  card.innerHTML='<strong>'+modeLabel+' Session '+(index+1)+'</strong><br>'+date.toLocaleDateString()+' - '+(session.summary?.pct||0)+'% ('+(session.summary?.total||0)+' putts)'
+  card.innerHTML='<strong>'+modeLabel+' Session '+(index+1)+'</strong><br>'+date.toLocaleDateString()+' - '+(summary.pct||0)+'% ('+(summary.total||0)+' putts)'
   card.onclick=()=>{accordion.style.display=accordion.style.display==="block"?"none":"block"}
 
-  if(mode==="random"){
+  if(manualData && manualData.summary?.total){
    const overview=document.createElement("div")
-   overview.innerHTML='<strong>Random totals:</strong> '+(session.summary?.made||0)+'/'+(session.summary?.total||0)+' ('+(session.summary?.pct||0)+'%)<br><span class="subtle">Best overall streak: '+(session.summary?.bestStreak||session.bestStreaks?.all||0)+'</span>'
+   overview.innerHTML='<strong>Manual totals:</strong> '+(manualData.summary.made||0)+'/'+(manualData.summary.total||0)+' ('+(manualData.summary.pct||0)+'%)'
+   accordion.appendChild(overview)
+  }
+
+  if(randomData && randomData.summary?.total){
+   const overview=document.createElement("div")
+   overview.innerHTML='<strong>Random totals:</strong> '+(randomData.summary?.made||0)+'/'+(randomData.summary?.total||0)+' ('+(randomData.summary?.pct||0)+'%)<br><span class="subtle">Best overall streak: '+(randomData.summary?.bestStreak||randomData.bestStreaks?.all||0)+'</span>'
    accordion.appendChild(overview)
   }
 
   DISTANCES.forEach(distance=>{
-   const stat=session.stats?.[distance]
-   if(!stat)return
-
-   const total=(stat.made||0)+(stat.missed||0)
-   if(!total)return
-
-   const missDir=stat.missDir||{shortLeft:0,longRight:0,longLeft:0,shortRight:0}
-   const pct=Math.round((stat.made||0)/total*100)
-   const star=pct>=PGA_TOUR_AVG[distance]?" ⭐":""
    const row=document.createElement("div")
-   const detailText=mode==="random"
-    ? 'Misses - L-Left: '+missDir.longLeft+' | L-Right: '+missDir.longRight+' | S-Left: '+missDir.shortLeft+' | S-Right: '+missDir.shortRight
-    : 'Misses - L-Left: '+missDir.longLeft+' | L-Right: '+missDir.longRight+' | S-Left: '+missDir.shortLeft+' | S-Right: '+missDir.shortRight+' | Best streak: '+(session.bestStreaks?.[distance]||0)
+   let lineHtml=""
 
-   row.innerHTML='<strong>'+distance+' ft:</strong> '+(stat.made||0)+'/'+total+' ('+pct+'%) - PGA '+PGA_TOUR_AVG[distance]+'%'+star+
-    '<br><span class="subtle">'+detailText+'</span>'
+   if(manualData){
+    const manualStat=manualData.stats?.[distance]
+    const manualTotal=(manualStat?.made||0)+(manualStat?.missed||0)
+    if(manualTotal){
+     const missDir=manualStat.missDir||{shortLeft:0,longRight:0,longLeft:0,shortRight:0}
+     const pct=Math.round((manualStat.made||0)/manualTotal*100)
+     const star=pct>=PGA_TOUR_AVG[distance]?" ⭐":""
+     lineHtml+='<strong>'+distance+' ft:</strong> Manual - '+(manualStat.made||0)+'/'+manualTotal+' ('+pct+'%) - PGA '+PGA_TOUR_AVG[distance]+'%'+star+
+      '<br><span class="subtle">Misses - L-Left: '+missDir.longLeft+' | L-Right: '+missDir.longRight+' | S-Left: '+missDir.shortLeft+' | S-Right: '+missDir.shortRight+' | Best streak: '+(manualData.bestStreaks?.[distance]||0)+'</span>'
+    }
+   }
+
+   if(randomData){
+    const randomStat=randomData.stats?.[distance]
+    const randomTotal=(randomStat?.made||0)+(randomStat?.missed||0)
+    if(randomTotal){
+     const missDir=randomStat.missDir||{shortLeft:0,longRight:0,longLeft:0,shortRight:0}
+     const pct=Math.round((randomStat.made||0)/randomTotal*100)
+     const star=pct>=PGA_TOUR_AVG[distance]?" ⭐":""
+     lineHtml+=(lineHtml?'<br>':'')+'<strong>'+distance+' ft:</strong> Random - '+(randomStat.made||0)+'/'+randomTotal+' ('+pct+'%) - PGA '+PGA_TOUR_AVG[distance]+'%'+star+
+      '<br><span class="subtle">Misses - L-Left: '+missDir.longLeft+' | L-Right: '+missDir.longRight+' | S-Left: '+missDir.shortLeft+' | S-Right: '+missDir.shortRight+'</span>'
+    }
+   }
+
+   if(!lineHtml)return
+   row.innerHTML=lineHtml
    accordion.appendChild(row)
   })
 
@@ -899,10 +1034,15 @@ function initApp(){
  randomState=loadRandomState()
  sessions=loadSessions()
 
- manualCurrentDistance=loadManualDistance()
- randomCurrentDistance=randomState.currentDistance
+  manualCurrentDistance=loadManualDistance()
+  randomCurrentDistance=randomState.currentDistance
 
- setMode("manual")
+ appMode=loadAppMode()
+ if(appMode==="random"){
+  selectNextRandomDistance()
+  saveRandomState()
+ }
+ setMode(appMode)
  renderHistory()
 }
 
@@ -913,6 +1053,7 @@ if(document.readyState==="loading"){
 }
 
 </script>
+
 
 
 
